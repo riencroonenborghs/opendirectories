@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Opendirectories</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <script>
+      function GoogleQuery(type, query) {
+        this.type   = type;
+        this.query  = query;
+        this.server = "https://www.google.co.nz/";
+        this.path   = "search";
+
+        this.build  = function() {          
+          return this.server + this.path + "?q=" + encodeURIComponent(this._query_string());
+        }
+
+        this._query_string = function() {
+          var query_string = 'intitle:"index.of" "'+this.query+'" -html -htm -php -asp -jsp -watchtheshows.com -mmnt.net';
+          switch(type) {
+            case 'video':
+              query_string += " (avi|mp4|divx) ";
+              break;
+            case 'music':
+              query_string += " (mp3|flac|aac) ";
+              break;
+            case 'books':
+              query_string += " (pdf|epub|mob) ";
+              break;
+          }
+          return query_string;
+        }
+
+      }
+
+      function submit(type) {
+        var form = $('form');
+        var google_query = new GoogleQuery(form.find('input[type=radio]:checked').val(), form.find('input#query').val());
+        window.location.href = google_query.build();
+      }
+    </script>
+  </head>
+  <body>
+
+    <div class='container'>
+      <div class="row">
+        <h1>Search</h1>
+      </div> <!-- .row -->
+
+      <form action="javascript:submit()" method="post" class='form form-inline'>
+        <div class="row">
+          <div class="form-group">
+            <input type="text" size="45" id="query" style="font-size: 15pt;" class="form-control">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div> <!-- .form-group -->
+        </div> <!-- .row -->
+        <div class="row">
+          <div class="radio">
+            <label class="radio-inline">
+              <input type="radio" name="content-type" id="video" value="video" checked>
+              <span class="glyphicon glyphicon-film" aria-hidden="true"></span>
+              Video
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="content-type" id="music" value="music">
+              <span class="glyphicon glyphicon-music" aria-hidden="true"></span>
+              Music
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="content-type" id="books" value="books">
+              <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+              Books
+            </label>
+          </div> <!-- .radio -->
+        </div> <!-- .row -->
+      </form>
+
+    </div> <!-- container -->
+
+  </body>
+</html>
