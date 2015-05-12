@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+
+  "name": "Opendirectories",
+  "description": "This extension uses Google to search for open directories",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "resources/search.png",
+    "default_popup": "resources/search.html"
+  },
+  "permissions": [
+    "activeTab"
+  ]
+}

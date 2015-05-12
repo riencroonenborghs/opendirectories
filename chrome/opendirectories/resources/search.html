@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Opendirectories</title>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-animate.min.js"></script>
+    <script src="js/angular-aria.min.js"></script>
+    <script src="js/angular-material.min.js"></script>
+    <script src="js/angular-material-icons.min.js"></script>
+    <script src="js/app.js"></script> 
+
+    <link rel="stylesheet" type="text/css" href="css/angular-material.min.css">
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+  </head>
+  <body ng-app="opendirectories" ng-controller="appController">
+
+    <md-content>
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2>
+            Opendirectories
+            <ng-md-icon ng-if="query" icon="chevron_right" size="14" style="fill: white"></ng-md-icon>
+            {{query}}
+          </h2>
+        </div>
+      </md-toolbar>
+    </md-content>
+
+    <md-content class="content" layout="column">
+      <div layout="row">
+        <md-input-container>
+          <label>Query</label>
+          <input type="text" ng-model="query"/>
+        </md-input-container>        
+        <md-button ng-click="search()">
+          <span ng-hide="small">Search</span>
+        </md-button>
+      </div>
+
+      <md-radio-group ng-model="query_type"  layout="row">
+        <md-radio-button ng-repeat="type in query_types" ng-value="type" class="md-primary">
+          {{type}}
+        </md-radio-button>
+      </md-radio-group>    
+
+      <div layout="row">
+        <md-checkbox ng-model="alternative" aria-label="Alternative">
+          Alternative
+        </md-checkbox>
+        <md-checkbox ng-model="play_dumb" aria-label="Play dumb">
+          Play dumb
+        </md-checkbox>
+      </div>
+
+      <md-card ng-if="query" class="query">
+        About to query:
+        <small>{{build_query()}}</small>
+      </md-card>  
+    </md-content>
+
+  </body>
+</html>
