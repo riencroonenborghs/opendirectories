@@ -23,9 +23,39 @@
             <ng-md-icon ng-if="query" icon="chevron_right" size="14" style="fill: white"></ng-md-icon>
             {{query}}
           </h2>
+          <span flex></span>
+          <a ng-href="#" ng-click="show_menu()">
+            <ng-md-icon icon="more_vert" style="fill: white"></ng-md-icon>
+          </a>
         </div>
       </md-toolbar>
-    </md-content>
+    </md-content>    
+
+    <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
+      <md-toolbar class="md-theme-light">
+        <h1 class="md-toolbar-tools">Menu</h1>
+      </md-toolbar>
+      <md-content ng-controller="menuController" layout-padding>
+        <md-list>
+          <md-list-item ng-repeat="item in blacklist" layout="row">
+            <a ng-href="#" ng-click="remove(item)" flex="10">
+              <ng-md-icon icon="delete" size="16"></ng-md-icon>
+            </a>
+            <span flex>{{item}}</span>
+          </md-list-item>
+        </md-list>
+
+        <div layout="row">
+          <md-input-container flex="75">
+            <label>URL to add</label>
+            <md-input ng-model="url"></md-input>          
+          </md-input-container>
+          <md-button ng-click="add()" flex="25">Add</md-button>  
+        </div>
+
+        <md-button ng-click="close()" class="md-primary">Close</md-button>
+      </md-content>
+    </md-sidenav>
 
     <md-content class="content" layout="column">
       <div layout="row">
