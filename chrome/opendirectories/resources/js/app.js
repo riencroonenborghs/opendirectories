@@ -3,10 +3,10 @@ var blacklist = ["watchtheshows.com", "mmnt.net", "listen77.com", "unknownsecret
 
 app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", function($scope, $mdMedia, $mdSidenav){
   $scope.query = null;
-  $scope.query_types = ["Movies", "Music", "Books"];
+  $scope.query_types = ["Movies", "Music", "Books", "General"];
   $scope.query_type = $scope.query_types[0];
   $scope.alternative = false
-  $scope.play_dumb = true
+  $scope.quoted = true
   
   var server = "https://www.google.com/";
   var path   = "search";
@@ -16,12 +16,12 @@ app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", function($s
     if($scope.alternative) { query_string = '"parent directory" ' }
     else { query_string = 'intitle:"index.of" '; }
     
-    if($scope.play_dumb) { query_string += '"' + $scope.query + '"'; }
+    if($scope.quoted) { query_string += '"' + $scope.query + '"'; }
     else { query_string += $scope.query; }
     query_string += ' -html -htm -php -asp -jsp ';
     for(var i=0; i<blacklist.length; ++i) { query_string += " -" + blacklist[i]; }
 
-    var types = {"Movies": " (avi|mp4|divx) ", "Music": " (mp3|flac|aac) ", "Books": " (pdf|epub|mob) "};
+    var types = {"Movies": " (avi|mp4|divx) ", "Music": " (mp3|flac|aac) ", "Books": " (pdf|epub|mob) ", "General": ""};
     return query_string + types[$scope.query_type]; 
   }
 
