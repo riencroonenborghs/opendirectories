@@ -1,0 +1,9 @@
+{
+  "name": "opendirectories",
+  "title": "opendirectories",
+  "id": "jid1-ERaqIM4BDOVZvw",
+  "description": "This add-in uses Google to search for open directories",
+  "author": "Rien <rien@croonenborghs.net>",
+  "license": "MPL 2.0",
+  "version": "0.1"
+}
