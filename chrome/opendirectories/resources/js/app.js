@@ -1,12 +1,26 @@
 var app = angular.module("opendirectories", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons"]);
 var blacklist = ["watchtheshows.com", "mmnt.net", "listen77.com", "unknownsecret.info", "trimediacentral.com", "wallywashis.name", "ch0c.com"];
+var query_types = [{name: "Movies", exts: "avi,mp4,divx"}, {name: "Music", exts: "mp3,flac,aac"}, {name: "Books", exts: "pdf,epub,mob"}, {name: "General", exts: ""}];
 
 app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", function($scope, $mdMedia, $mdSidenav){
   $scope.query = null;
-  $scope.query_types = ["Movies", "Music", "Books", "General"];
-  $scope.query_type = $scope.query_types[0];
+  $scope.query_types = query_types;
+  $scope.query_type = 0;
   $scope.alternative = false
   $scope.quoted = true
+
+  chrome.storage.sync.get('blacklist', function (data) {
+    if(data.blacklist) {      
+      blacklist = JSON.parse(data.blacklist);
+      $scope.blacklist = blacklist;
+    }
+  });  
+  chrome.storage.sync.get("query_types", function (data) {
+    if(data.query_types) {      
+      query_types = JSON.parse(data.query_types);
+      $scope.query_types = query_types;
+    }
+  });  
   
   var server = "https://www.google.com/";
   var path   = "search";
@@ -21,8 +35,12 @@ app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", function($s
     query_string += ' -html -htm -php -asp -jsp ';
     for(var i=0; i<blacklist.length; ++i) { query_string += " -" + blacklist[i]; }
 
-    var types = {"Movies": " (avi|mp4|divx) ", "Music": " (mp3|flac|aac) ", "Books": " (pdf|epub|mob) ", "General": ""};
-    return query_string + types[$scope.query_type]; 
+    return query_string + build_ext(); 
+  }
+  var build_ext = function() {
+    var query_type = query_types[$scope.query_type];
+    if(query_type.exts == "") { return ""; }
+    else { return " (" + query_type.exts.split(',').join("|") + ") "; }
   }
 
   $scope.search = function() {
@@ -42,34 +60,55 @@ app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", function($s
 
 
 app.controller("menuController", ["$scope", "$mdSidenav", function($scope, $mdSidenav){  
-  chrome.storage.sync.get('blacklist', function (data) {
-    if(data.blacklist) {      
-      blacklist = JSON.parse(data.blacklist);
-      $scope.blacklist = blacklist;
-    }
-  });
-   
-  $scope.blacklist = blacklist;
   $scope.close = function() {
      $mdSidenav('right').close();
   }
+  $scope.blacklist = false;
+  $scope.query_types = false;
+  $scope.show_blacklist = function() { $scope.blacklist = true; }
+  $scope.show_query_types = function() { $scope.query_types = true; }
+  $scope.show_links = function() { $scope.blacklist = false; $scope.query_types = false; }
+}]);  
 
+
+var store = function(key, list) {
+  var data = {};
+  data[key] = JSON.stringify(list);
+  chrome.storage.sync.set(data);
+}  
+var remove_from_list = function(key, list, item) {
+  list.splice(list.indexOf(item), 1);
+  store(key, list);
+}
+
+app.controller("blacklistController", ["$scope", function($scope){  
+  $scope.blacklist = blacklist;
   $scope.url = null;
   $scope.add = function() {
     if($scope.url) {
       blacklist.push($scope.url);
       $scope.url = null;
-      store();
+      store("blacklist", blacklist);
     }
   }
-
   $scope.remove = function(item) {
-    blacklist.splice(blacklist.indexOf(item), 1);
-    store();
-  }
+    remove_from_list("blacklist", blacklist, item);
+  }  
+}]);
 
-  var store = function() {
-    var data = {}; data['blacklist'] = JSON.stringify(blacklist);
-    chrome.storage.sync.set(data);
+app.controller("queryTypesController", ["$scope", function($scope){  
+  $scope.query_types = query_types;
+  $scope.name = null;
+  $scope.exts = null;
+  $scope.add = function() {
+    if($scope.name && $scope.exts) {
+      query_types.push({name: $scope.name, exts: $scope.exts});
+      $scope.name = null;
+      $scope.exts = null;
+      store("query_types", query_types);
+    }
+  }
+  $scope.remove = function(item) {
+    remove_from_list("query_types", query_types, item);
   }  
 }]);
