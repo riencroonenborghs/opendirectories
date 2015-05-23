@@ -8,6 +8,7 @@ app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", function($s
   $scope.query_type = 0;
   $scope.alternative = false
   $scope.quoted = true
+  $scope.incognito = true;
 
   chrome.storage.sync.get('blacklist', function (data) {
     if(data.blacklist) {      
@@ -45,7 +46,10 @@ app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", function($s
 
   $scope.search = function() {
     if($scope.query) { 
-      window.open(build_url(), "_blank");
+      chrome.windows.create({
+        url: build_url(),
+        incognito: $scope.incognito
+      });
     }          
   }
 
