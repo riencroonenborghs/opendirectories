@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+gem "rails", "4.2.1"
+gem "rails-api"
+gem "sqlite3"
+gem "better_errors"
+gem "dotenv-rails"

@@ -1,0 +1,27 @@
+<!-- main panel -->
+<md-dialog aria-label="New Download">
+  <md-content>
+    <div layout="row">
+      <h3>New Download</h3>
+    </div>
+    <div layout="row">
+      <md-input-container flex>
+        <label>URL</label>
+        <md-input ng-model="model.url"></md-input>          
+      </md-input-container>
+    </div>
+    <div layout="row">
+      <md-input-container flex>
+        <label>HTTP Username</label>
+        <md-input ng-model="model.http_username"></md-input>          
+      </md-input-container>
+      <md-input-container flex>
+        <label>HTTP Password</label>
+        <md-input ng-model="model.http_password"></md-input>          
+      </md-input-container>
+    </div>
+    <div layout="row">
+      <md-button ng-click="save()" class="close md-primary" flex="35">Save</md-button>
+    </div>
+  </md-content>    
+</md-dialog>

@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+
+  "name": "OpenDL",
+  "description": "DL",
+  "version": "0.1",
+
+  "browser_action": {
+    "default_icon": "resources/dl.png",
+    "default_popup": "resources/dl.html"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "http://*/"
+  ]
+}

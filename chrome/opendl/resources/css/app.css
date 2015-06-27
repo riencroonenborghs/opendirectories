@@ -1,0 +1,12 @@
+.content { padding: 20px; }      
+.content md-input-container { width: 400px; padding-bottom: 0; }
+.content md-card { padding: 10px; }
+a:hover { cursor: pointer; }
+.loading { color: lightgray; font-size: 8pt; }
+.loading span { position: relative; bottom: 3px; }
+md-sidenav md-input-container { padding: 0; }
+md-sidenav .close { margin-top: 20px; }
+
+body {width: 500px;height:350px;}
+md-dialog { style="padding:10px; width: 75%; }
+.remove-download { cursor: pointer; }
