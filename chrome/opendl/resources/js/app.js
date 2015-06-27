@@ -8,8 +8,13 @@ app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", "$http", "$
 
   $scope.status_to_icon = function(download) { return status_icons[download.status]; }
   $scope.get_downloads  = function() { 
-    $http({method: 'GET', url: 'http://'+server+':'+port+'/api/v1/downloads.json', dataType: 'jsonp'}).success(function(data){ $scope.downloads = data; }); 
+    $http({method: 'GET', url: 'http://'+server+':'+port+'/api/v1/downloads.json', dataType: 'jsonp'})
+      .success(function(data){ 
+        $.map(data, function(e,i) { e.visible = false; });
+        $scope.downloads = data; 
+      }); 
   }
+  $scope.format_date = function(dt) { if(dt) { return moment(dt).format("Do MMMM YYYY, h:mm:ss a"); } }
 
   chrome.storage.sync.get('opendl', function (data) {
     if(data.opendl) {      

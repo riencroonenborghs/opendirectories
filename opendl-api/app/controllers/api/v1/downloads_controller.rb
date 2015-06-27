@@ -17,7 +17,8 @@ private
   end
 
   def create_dl
-    if Download.create!(params.require(:download).permit(:url, :http_username, :http_password))
+    if download = Download.create!(params.require(:download).permit(:url, :http_username, :http_password))      
+      download.queue!
       render nothing: true, status: 200
     else
       render nothing: true, status: 400

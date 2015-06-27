@@ -9,7 +9,9 @@
     <script src="js/angular-aria.min.js"></script>
     <script src="js/angular-material.min.js"></script>
     <script src="js/angular-material-icons.min.js"></script>
+    <script src="js/moment-2.10.3.min.js"></script>
     <script src="js/app.js"></script>     
+    
 
     <link rel="stylesheet" type="text/css" href="css/angular-material.min.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">
@@ -83,14 +85,24 @@
     <md-content class="content" layout="column">
 
       <md-list>
-        <md-list-item ng-repeat="download in downloads">
-          <div layout="row">
+        <md-list-item ng-repeat="download in downloads" style="width: 100%">
+          <div layout="row" class="download" ng-click="download.visible = !download.visible">
             <span flex="5" ng-if="download.status == 'initial'" class="remove-download">
               <ng-md-icon icon="highlight_remove" size="14" flex="5" ng-click="delete_download(download)"></ng-md-icon>
             </span>
             <span flex="5" ng-if="download.status != 'initial'">&nbsp;</span>
             <ng-md-icon icon="{{status_to_icon(download)}}" size="14" flex="5"></ng-md-icon>
             <span flex="90">{{download.url}}</span>
+          </div>
+          <div layout="column" ng-if="download.visible">            
+            <div layout="row">
+              <span flex="10">&nbsp;</span>
+              <span flex>started:  {{format_date(download.started_at)}}</span>
+            </div>
+            <div layout="row" ng-if="download.finished_at">
+              <span flex="10">&nbsp;</span>
+              <span flex>finished:  {{format_date(download.finished_at)}}</span>
+            </div>
           </div>
         </md-list-item>
       </md-list>

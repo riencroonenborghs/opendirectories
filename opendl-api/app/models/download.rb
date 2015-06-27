@@ -9,17 +9,19 @@ class Download < ActiveRecord::Base
   validates :status, inclusion: { in: [INITIAL, QUEUED, BUSY, DONE, ERROR] }
   validate :http_credentials
 
-  before_create :initial_status
-
   def run!
     begin
       update_attributes!(started_at: Time.zone.now, status: BUSY)
-      puts build_cmd
-      # system build_cmd
+      system build_cmd
       update_attributes!(finished_at: Time.zone.now, status: DONE)
     rescue => e
       update_attributes!(finished_at: Time.zone.now, status: ERROR, error: e.message)
     end
+  end
+
+  def queue!
+    DownloadWorker.perform_async(id)
+    update_attributes!(status: QUEUED)
   end
 
   IGNORE_ATTRIBUTES = %w{created_at updated_at http_username http_password}
@@ -40,10 +42,6 @@ private
     array << " --user #{self.http_username} --password #{self.http_password} " if http_credentials?
     array << " \"#{self.url}\" "
     array.join(" ")
-  end
-
-  def initial_status
-    self.status = INITIAL
   end
 
   def http_credentials

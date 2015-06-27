@@ -10,3 +10,4 @@ md-sidenav .close { margin-top: 20px; }
 body {width: 500px;height:350px;}
 md-dialog { style="padding:10px; width: 75%; }
 .remove-download { cursor: pointer; }
+.download { cursor: pointer; }
