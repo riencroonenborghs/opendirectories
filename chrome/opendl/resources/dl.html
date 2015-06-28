@@ -95,7 +95,7 @@
             <span flex="90">{{download.url}}</span>
           </div>
           <div layout="column" ng-if="download.visible">            
-            <div layout="row">
+            <div layout="row" ng-if="download.started_at">
               <span flex="10">&nbsp;</span>
               <span flex>started:  {{format_date(download.started_at)}}</span>
             </div>
