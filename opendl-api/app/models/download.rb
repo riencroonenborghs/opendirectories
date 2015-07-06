@@ -9,6 +9,8 @@ class Download < ActiveRecord::Base
   validates :status, inclusion: { in: [INITIAL, QUEUED, BUSY, DONE, ERROR] }
   validate :http_credentials
 
+  scope :last_10, -> { limit(10) }
+
   def run!
     begin
       update_attributes!(started_at: Time.zone.now, status: BUSY)

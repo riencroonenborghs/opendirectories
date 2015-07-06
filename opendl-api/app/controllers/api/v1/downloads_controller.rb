@@ -13,7 +13,7 @@ class Api::V1::DownloadsController < ApplicationController
 private
 
   def index_dl
-    render json: Download.all.map(&:to_json)
+    render json: Download.last_10.map(&:to_json)
   end
 
   def create_dl
