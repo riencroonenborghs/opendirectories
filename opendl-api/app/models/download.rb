@@ -9,7 +9,7 @@ class Download < ActiveRecord::Base
   validates :status, inclusion: { in: [INITIAL, QUEUED, BUSY, DONE, ERROR] }
   validate :http_credentials
 
-  scope :last_10, -> { limit(10) }
+  scope :last_10, -> { order(id: :desc).limit(10) }
 
   def run!
     begin
