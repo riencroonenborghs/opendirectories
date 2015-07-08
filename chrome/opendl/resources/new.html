@@ -1,9 +1,11 @@
 <!-- main panel -->
 <md-dialog aria-label="New Download">
-  <md-content>
-    <div layout="row">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
       <h3>New Download</h3>
     </div>
+  </md-toolbar>
+  <md-content>
     <div layout="row">
       <md-input-container flex>
         <label>URL</label>
@@ -22,6 +24,8 @@
     </div>
     <div layout="row">
       <md-button ng-click="save()" class="close md-primary" flex="35">Save</md-button>
+      <span flex></span>
+      <md-button ng-click="close()" class="close md-primary md-warn" flex="35">Close</md-button>
     </div>
   </md-content>    
 </md-dialog>

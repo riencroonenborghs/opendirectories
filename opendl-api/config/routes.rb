@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :downloads, only: :index
+      resources :downloads, only: [:index, :queue] do
+        member do
+          get :queue
+        end
+      end
     end
   end
 

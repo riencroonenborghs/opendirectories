@@ -1,5 +1,5 @@
 var app             = angular.module("opendl", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons"]);
-var status_icons    = {initial: "cloud", queued: "cloud_queue", busy: "cloud_download", done: "cloud_done", error: "error"};
+var status_icons    = {initial: "cloud_circle", queued: "cloud", busy: "cloud_download", done: "done", error: "error"};
 var server          = "localhost";
 var port            = "4000";
 
@@ -10,11 +10,13 @@ app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", "$http", "$
   $scope.get_downloads  = function() { 
     $http({method: 'GET', url: 'http://'+server+':'+port+'/api/v1/downloads.json', dataType: 'jsonp'})
       .success(function(data){ 
-        $.map(data, function(e,i) { e.visible = false; });
+        $.map(data.items, function(e,i) { e.visible = false; });
         $scope.downloads = data; 
       }); 
   }
   $scope.format_date = function(dt) { if(dt) { return moment(dt).format("Do MMMM YYYY, h:mm:ss a"); } }
+  $scope.can_delete = function(dl) { return dl.status == 'initial' || dl.status == 'queued'; }
+  $scope.toggle_visible = function(dl) { if(dl.started_at) { dl.visible = !dl.visible; } }
 
   chrome.storage.sync.get('opendl', function (data) {
     if(data.opendl) {      
@@ -32,7 +34,7 @@ app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", "$http", "$
   $scope.new_download = function($event) {
     $mdDialog.show({
       parent: angular.element(document.body), 
-      scope: $scope,
+      // scope: $scope,
       targetEvent: $event,
       templateUrl: "new.html",           
       controller: "DialogController",
@@ -68,7 +70,12 @@ app.controller("DialogController", ["$scope", "$mdDialog", "$http", function($sc
     var data = {download: $scope.model}; 
     data["method"] = "create";
     $http({method: 'GET', url: 'http://'+server+':'+port+'/api/v1/downloads?'+$.param(data)})
-      .success(function() { $scope.get_downloads(); });
+      .success(function() { 
+        // $scope.$emit("reload");
+      });
+  }
+  $scope.close = function() {
+    $mdDialog.hide();
   }
 }]);  
 

@@ -9,7 +9,17 @@ class Download < ActiveRecord::Base
   validates :status, inclusion: { in: [INITIAL, QUEUED, BUSY, DONE, ERROR] }
   validate :http_credentials
 
+  scope :last_n, lambda { |n| order(id: :desc).limit(n) }
   scope :last_10, -> { order(id: :desc).limit(10) }
+  scope :queued, -> { where(status: QUEUED) }
+  scope :busy, -> { where(status: BUSY) }
+  scope :done, -> { where(status: DONE) }
+  scope :error, -> { where(status: ERROR) }
+
+
+  def self.latest
+    [queued.last_n(5), busy.last_n(5), done.last_n(5), error.last_n(5)].compact.flatten
+  end
 
   def run!
     begin

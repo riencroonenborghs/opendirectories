@@ -1,13 +1,25 @@
-.content { padding: 20px; }      
-.content md-input-container { width: 400px; padding-bottom: 0; }
-.content md-card { padding: 10px; }
+body { min-width: 500px; min-height:350px; }
 a:hover { cursor: pointer; }
-.loading { color: lightgray; font-size: 8pt; }
-.loading span { position: relative; bottom: 3px; }
+
+.pointer { cursor: pointer; }
+.status-initial { fill: rgb(190, 190, 21);}
+.status-queued { fill: orange;}
+.status-busy { fill: lightgreen;}
+.status-done { fill: darkgreen;}
+.status-error { fill: red; }
+
+.content { padding: 20px; }      
+/*md-content.content md-list md-list-item .download { font-size: 12pt; }*/
+/*md-content.content .download .url { word-break: break-word; padding-right: 20px; }*/
+.content .url { word-break: break-word; padding-right: 40px; padding-top: 3px; font-size: 10pt; }
+.content .status-icon { padding-top: 10px; }
+.content .top { padding-top: 16px; }
+.content .times { margin: 0; }
+.content .error { color: red; }
+
+
 md-sidenav md-input-container { padding: 0; }
 md-sidenav .close { margin-top: 20px; }
 
-body {width: 500px;height:350px;}
 md-dialog { style="padding:10px; width: 75%; }
-.remove-download { cursor: pointer; }
-.download { cursor: pointer; }
+

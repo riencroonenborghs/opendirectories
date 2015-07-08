@@ -83,26 +83,37 @@
 
     <!-- content panel -->
     <md-content class="content" layout="column">
-
+      <md-subheader>
+        {{downloads.queued}} Queued - 
+        {{downloads.busy}} Busy - 
+        {{downloads.done}} Done - 
+        {{downloads.error}} Error - 
+        {{downloads.total}} Total
+      </md-subheader>
       <md-list>
-        <md-list-item ng-repeat="download in downloads" style="width: 100%">
-          <div layout="row" class="download" ng-click="download.visible = !download.visible">
-            <span flex="5" ng-if="download.status == 'initial'" class="remove-download">
-              <ng-md-icon icon="highlight_remove" size="14" flex="5" ng-click="delete_download(download)"></ng-md-icon>
-            </span>
-            <span flex="5" ng-if="download.status != 'initial'">&nbsp;</span>
-            <ng-md-icon icon="{{status_to_icon(download)}}" size="14" flex="5"></ng-md-icon>
-            <span flex="90">{{download.url}}</span>
-          </div>
-          <div layout="column" ng-if="download.visible">            
-            <div layout="row" ng-if="download.started_at">
-              <span flex="10">&nbsp;</span>
-              <span flex>started:  {{format_date(download.started_at)}}</span>
-            </div>
-            <div layout="row" ng-if="download.finished_at">
-              <span flex="10">&nbsp;</span>
-              <span flex>finished:  {{format_date(download.finished_at)}}</span>
-            </div>
+        <md-list-item class="md-3-line" ng-repeat="download in downloads.items" layout="row">
+          <ng-md-icon icon="{{status_to_icon(download)}}" title="{{download.status}}" class="pointer status-icon status-{{download.status}}" size="35" flex="10" ng-click="toggle_visible(download)"></ng-md-icon>
+
+          <!--
+          <ng-md-icon icon="highlight_remove" size="20" flex="5" ng-if="can_delete(download)" class="pointer top" ng-click="delete_download(download)"></ng-md-icon>
+          <span flex="5" ng-if="!can_delete(download)">&nbsp;</span>
+          -->
+
+          <div class="md-list-item-text" flex="85">
+            <h3 class="url">{{ download.url }}</h3>            
+            <p class="times">
+              <div ng-if="download.visible">
+                <div ng-if="download.started_at">
+                  {{ format_date(download.started_at) }}
+                  <br ng-if="download.finished_at" />
+                  {{ format_date(download.finished_at) }}
+                </div>
+                <div ng-if="download.error" class="error">
+                  <h2>Error</h2>
+                  <p>{{download.error}}</p>
+                </div>
+              </div>
+            </p>
           </div>
         </md-list-item>
       </md-list>
