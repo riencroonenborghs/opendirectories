@@ -1,0 +1,26 @@
+<!-- main panel -->
+<md-dialog aria-label="Authenticate">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h3>Authenticate</h3>
+    </div>
+  </md-toolbar>
+  <md-content>
+    <div layout="column">
+      <md-input-container>
+        <label>Email</label>
+        <md-input ng-model="model.email"></md-input>          
+      </md-input-container>
+
+      <md-input-container>
+        <label>Password</label>
+        <md-input type="password" ng-model="model.password"></md-input>
+      </md-input-container>
+    </div>
+    <div layout="row">
+      <span class="error" style="color: red">{{error}}</span>
+      <span flex></span>
+      <md-button ng-click="logIn()" class="md-primary">Log in</md-button>
+    </div>
+  </md-content>    
+</md-dialog>

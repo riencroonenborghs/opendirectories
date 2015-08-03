@@ -1,4 +1,4 @@
-body { min-width: 500px; min-height:350px; }
+body { min-width: 500px; min-height: 375px; }
 a:hover { cursor: pointer; }
 
 .pointer { cursor: pointer; }
@@ -15,11 +15,10 @@ a:hover { cursor: pointer; }
 .content .status-icon { padding-top: 10px; }
 .content .top { padding-top: 16px; }
 .content .times { margin: 0; }
-.content .error { color: red; }
 
 
-md-sidenav md-input-container { padding: 0; }
+md-sidenav md-input-container { padding: 5px; }
 md-sidenav .close { margin-top: 20px; }
 
 md-dialog { style="padding:10px; width: 75%; }
-
+.error { color: red; }
