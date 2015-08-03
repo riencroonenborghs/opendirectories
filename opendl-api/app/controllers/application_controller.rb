@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::API
+  include DeviseTokenAuth::Concerns::SetUserByToken  
+  before_action :set_cors_headers!
+
 private
   def set_cors_headers!    
     {"Access-Control-Allow-Headers" => "Content-Type",

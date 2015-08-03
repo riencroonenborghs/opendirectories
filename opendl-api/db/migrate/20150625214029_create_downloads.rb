@@ -1,6 +1,7 @@
 class CreateDownloads < ActiveRecord::Migration
   def change
     create_table :downloads do |t|
+      t.references :user, null: false
       t.string :url, null: false
       t.string :http_username
       t.string :http_password
@@ -11,5 +12,7 @@ class CreateDownloads < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+
+    add_index :downloads, :user_id
   end
 end

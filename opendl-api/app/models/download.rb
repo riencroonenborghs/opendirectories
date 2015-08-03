@@ -5,6 +5,8 @@ class Download < ActiveRecord::Base
   DONE    = "done"
   ERROR   = "error"
 
+  belongs_to :user
+  
   validates :url, presence: true
   validates :status, inclusion: { in: [INITIAL, QUEUED, BUSY, DONE, ERROR] }
   validate :http_credentials

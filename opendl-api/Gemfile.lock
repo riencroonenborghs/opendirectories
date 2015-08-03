@@ -37,6 +37,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.0)
+    bcrypt (3.1.10)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -46,6 +47,16 @@ GEM
       timers (~> 4.0.0)
     coderay (1.1.0)
     connection_pool (2.1.3)
+    devise (3.5.1)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
+    devise_token_auth (0.1.31)
+      devise (~> 3.3)
+      rails (~> 4.2)
     dotenv (2.0.1)
     dotenv-rails (2.0.1)
       dotenv (= 2.0.1)
@@ -64,6 +75,7 @@ GEM
     minitest (5.7.0)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
+    orm_adapter (0.5.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -98,6 +110,8 @@ GEM
     redis (3.0.7)
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
+    responders (2.1.0)
+      railties (>= 4.2.0, < 5)
     sidekiq (3.3.2)
       celluloid (>= 0.16.0)
       connection_pool (>= 2.1.1)
@@ -117,12 +131,15 @@ GEM
       hitimes
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    warden (1.2.3)
+      rack (>= 1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   better_errors
+  devise_token_auth
   dotenv-rails
   rails (= 4.2.1)
   rails-api
