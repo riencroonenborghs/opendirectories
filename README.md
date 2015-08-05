@@ -1,21 +1,59 @@
-# opendirectories
+# Features
+This repository features:
+- a [Chrome extension](https://github.com/riencroonenborghs/opendirectories/tree/master/chrome/opendirectories) and a [Firefox add-on](https://github.com/riencroonenborghs/opendirectories/tree/master/firefox) for searches
+- a [Chrome extension](https://github.com/riencroonenborghs/opendirectories/tree/master/chrome/opendl) and [Ruby on Rails app](https://github.com/riencroonenborghs/opendirectories/tree/master/opendl-api) for acquisition
 
-... is a repository with scripts and some hacked together JS code to search and use open directories.
+# Compile
+The search Chrome extension and Firefox add-on should work straight out of the box. 
 
-# scripts
+The acquisition extension is written in coffeescript. To compile run:
+```
+coffee -o build -c src/*
+```
 
-Just a wrapper for `wget`. It does what it needs to do.
+# How to install
 
-# Chrome extension
+## Chrome extension
+- go to `chrome://extensions`
+- check `Developer mode` *(top right)*
+- click `Load unpacked extension...` *(top left)*
+- point it to the extension *(the folder with the manifest.json file)*
+- click `Select`
 
-I made a Chrome extension that lets you search. Nothing fancy, but it does the trick.
+## Firefox add-on
+- go to `about:addons`
+- click settings button next to the search field *(top right)* and select `Install Add-on From File...`
+- point it to the extension *(the folder with the manifest.json file)*
+- click `Open`
 
-It has a feature to keep a list of blacklisted URLs you want to omit from your search results. 
-You can also define your query types.
-It uses Chrome's sycned storage so it's sweet.
-
-# Firefox add-on
-
-Same thing but for Firefox.
-
-Doesn't have the blacklist or query types feature yet.
+## Ruby on Rails app
+Simple and easy steps:
+- clone the repository
+```
+git clone https://github.com/riencroonenborghs/opendirectories/tree/master/opendl-api
+```
+- bundle install
+```
+cd opendl-api
+bundle install
+```
+- create and migrate the database
+```
+rake db:create db:migrate
+```
+- in the Rails console: create a user
+```
+User.create email: "some@email.com", password: "itsasecret", password_confirmation: "itsasecret", provider: "email"
+```
+- fire up sidekiq (in `screen` or separate terminal)
+```
+screen <ENTER>
+sidekiq
+CTRL+A
+D
+```
+- fire up the server
+```
+./bin/rails server
+```
+Now you're good to go
