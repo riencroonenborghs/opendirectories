@@ -88,7 +88,7 @@ private
   end
 
   def command
-    cmd = ["#{cmd} --output #{ENV["DOWNLOAD_DIRECTORY"]} --no-check-cert"]
+    cmd = ["#{cmd} --output #{ENV["OUTPUT_PATH"]} --no-check-cert"]
     cmd << " --user #{http_username} --password #{http_password} " if http_credentials?
     cmd << " \"#{url}\" "
     cmd.join(" ")

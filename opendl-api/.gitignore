@@ -16,3 +16,7 @@
 !/log/.keep
 /tmp
 .env
+
+
+Capfile
+config/deploy.rb
