@@ -11,7 +11,6 @@ class Download < ActiveRecord::Base
 
   validates_presence_of :url
   validates_format_of :url, with: URI::regexp(%w(http https))
-  validates_uniqueness_of :url, scope: :user_id
   validates_inclusion_of :status, in: VALID_STATUSES
   validate :http_credentials
 

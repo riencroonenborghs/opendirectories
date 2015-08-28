@@ -1,5 +1,5 @@
 class DownloadJob
-  @queue = :download
+  @queue = :opendl
 
   def self.perform(id)
     download = Download.find_by_id(id)
