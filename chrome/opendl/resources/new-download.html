@@ -1,31 +1,34 @@
 <!-- main panel -->
-<md-dialog aria-label="New Download">
+<md-dialog aria-label="New Download" class="new-download">
   <md-toolbar>
     <div class="md-toolbar-tools">
       <h3>New Download</h3>
     </div>
   </md-toolbar>
   <md-content>
-    <div layout="row">
-      <md-input-container flex>
-        <label>URL</label>
-        <md-input ng-model="model.url"></md-input>          
-      </md-input-container>
-    </div>
-    <div layout="row">
-      <md-input-container flex>
-        <label>HTTP Username</label>
-        <md-input ng-model="model.http_username"></md-input>          
-      </md-input-container>
-      <md-input-container flex>
-        <label>HTTP Password</label>
-        <md-input ng-model="model.http_password"></md-input>          
-      </md-input-container>
-    </div>
-    <div layout="row">
-      <md-button ng-click="save()" class="close md-primary" flex="35">Save</md-button>
-      <span flex></span>
-      <md-button ng-click="close()" class="close md-primary md-warn" flex="35">Close</md-button>
-    </div>
+    <ng-form name="forms.form">
+      <div layout="column">
+        <md-input-container flex>
+          <label>URL</label>
+          <input type="text" ng-model="model.url" ng-change="error = null"></md>
+        </md-input-container>
+        <span class="error" style="color: red">{{error}}</span>
+      </div>
+      <div layout="row">
+        <md-input-container flex>
+          <label>HTTP Username</label>
+          <md-input ng-model="model.http_username"></md-input>          
+        </md-input-container>
+        <md-input-container flex>
+          <label>HTTP Password</label>
+          <md-input ng-model="model.http_password"></md-input>          
+        </md-input-container>
+      </div>
+      <div layout="row">
+        <md-button ng-click="save()" ng-disabled="forms.form.$pristine" class="close md-primary" flex="35">Save</md-button>
+        <span flex></span>
+        <md-button ng-click="close()" class="close md-primary md-warn" flex="35">Close</md-button>
+      </div>      
+    </ng-form>
   </md-content>    
 </md-dialog>

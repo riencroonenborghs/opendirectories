@@ -2,10 +2,10 @@
 (function() {
   var app;
 
-  app = angular.module("opendl.auth", []);
+  app = angular.module("opendl-downloader.auth", []);
 
   app.controller("authController", [
-    "$scope", "Server", "$auth", "Logging", "$mdDialog", function($scope, Server, $auth, Logging, $mdDialog) {
+    "$scope", "$rootScope", "Server", "$auth", "Logging", "$mdDialog", function($scope, $rootScope, Server, $auth, Logging, $mdDialog) {
       $scope.model = {
         email: "",
         password: ""
@@ -13,7 +13,9 @@
       return $scope.logIn = function() {
         $scope.error = "";
         return $auth.submitLogin($scope.model).then(function(d) {
-          return $mdDialog.hide();
+          $mdDialog.hide();
+          $rootScope.$broadcast("reload");
+          return $rootScope.$emit("reload");
         })["catch"](function(d) {
           return $scope.error = d.errors.join(", ");
         });

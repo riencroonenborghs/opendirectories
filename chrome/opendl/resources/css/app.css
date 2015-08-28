@@ -1,4 +1,6 @@
 body { min-width: 500px; min-height: 375px; }
+.new-download { min-width: 80%; }
+.authenticate { min-width: 80%; }
 a:hover { cursor: pointer; }
 
 .pointer { cursor: pointer; }
@@ -8,7 +10,8 @@ a:hover { cursor: pointer; }
 .status-done { fill: darkgreen;}
 .status-error { fill: red; }
 
-.content { padding: 20px; }      
+.content { padding: 20px; }   
+.download { padding: 10px; margin-bottom: 5px; }      
 /*md-content.content md-list md-list-item .download { font-size: 12pt; }*/
 /*md-content.content .download .url { word-break: break-word; padding-right: 20px; }*/
 .content .url { word-break: break-word; padding-right: 40px; padding-top: 3px; font-size: 10pt; }

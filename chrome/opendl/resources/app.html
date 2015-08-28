@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>OpenDL</title>
+    <title>OpenDL Downloader</title>
     <script src="js/jquery/jquery-1.11.3.min.js"></script>
     <script src="js/angular/angular.min.js"></script>
     <script src="js/angular/angular-cookie.min.js"></script>
@@ -13,23 +13,25 @@
     <script src="js/angular/angular-material-icons.min.js"></script>
     <script src="js/moment-2.10.3.min.js"></script>
 
-    <script src="build/dlapp.js"></script>     
+    <script src="build/app.js"></script>     
     <script src="build/auth.js"></script>     
     
     <link rel="stylesheet" type="text/css" href="css/angular-material.min.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">
   </head>
-  <body ng-app="opendl" ng-controller="appController">
+  <body ng-app="opendl-downloader" ng-controller="appController">
 
     <!-- main panel -->
     <md-content>
       <md-toolbar>
         <div class="md-toolbar-tools">
           <!-- title -->
+          <img src="app.png" style="height: 32px; padding-right: 5px;" />
           <h2>
-            OpenDL
-            <ng-md-icon ng-if="path" icon="chevron_right" size="14" style="fill: white"></ng-md-icon>
             {{path}}
+            <small>
+              ({{Server.service.toString()}})
+            </small>
           </h2>
           <!-- menu icon -->
           <span flex></span>
@@ -53,22 +55,29 @@
     <md-content class="content" layout="column">
       <md-subheader>
         {{downloads.queued}} Queued - 
-        {{downloads.busy}} Busy - 
-        {{downloads.done}} Done - 
+        {{downloads.started}} Started - 
+        {{downloads.finished}} Finished - 
         {{downloads.error}} Error - 
+        {{downloads.cancelled}} Cancelled - 
         {{downloads.total}} Total
       </md-subheader>
       <md-list>
-        <md-list-item class="md-3-line" ng-repeat="download in downloads.items" layout="row">
-          <ng-md-icon icon="{{download.icon}}" title="{{download.status}}" class="pointer status-icon status-{{download.status}}" size="35" flex="10" ng-click="download.visible = !download.visible"></ng-md-icon>
+        <md-list-item class="md-whiteframe-z1 md-3-line download" ng-repeat="download in downloads.items" layout="row">          
+          <ng-md-icon icon="{{download.icon}}" 
+                      title="{{download.status}}" 
+                      class="status-icon status-{{download.status}}" 
+                      ng-class="{pointer : download.hasPointer}" 
+                      size="35" 
+                      flex="10" 
+                      ng-click="download.visible = !download.visible"></ng-md-icon>
 
           <div class="md-list-item-text" flex="85">
             <h3 class="url">
               {{ download.url }}
-              <div ng-if="download.status == 'done' || download.status == 'queued'">
-                <a ng-href="#" ng-click="deleteDownload(download)">
-                  DELETE
-                </a>
+              <div>
+                <md-button ng-if="download.canDelete" title="delete" ng-click="deleteDownload(download)" aria-label="Delete download"><ng-md-icon icon="delete"></ng-md-icon></md-button>
+                <md-button ng-if="download.canCancel" title="cancel" ng-click="cancelDownload(download)" aria-label="Cancel download"><ng-md-icon icon="cancel"></ng-md-icon></md-button>
+                <md-button ng-if="download.canQueue" title="queue" ng-click="queueDownload(download)" aria-label="Queue download"><ng-md-icon icon="queue"></ng-md-icon></md-button>
               </div>
             </h3>            
             <p class="times">
@@ -85,7 +94,7 @@
                 </div>
               </div>
             </p>
-          </div>
+          </div>          
         </md-list-item>
       </md-list>
       

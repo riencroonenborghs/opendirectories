@@ -1,13 +1,13 @@
 {
   "manifest_version": 2,
 
-  "name": "OpenDL",
-  "description": "DL",
-  "version": "0.1",
+  "name": "OpenDL Downloader",
+  "description": "OpenDL Downloader",
+  "version": "1.0",
 
   "browser_action": {
-    "default_icon": "resources/dl.png",
-    "default_popup": "resources/dl.html"
+    "default_icon": "resources/app.png",
+    "default_popup": "resources/app.html"
   },
   "permissions": [
     "activeTab",
