@@ -1,62 +1,76 @@
 class Download < ActiveRecord::Base
-  INITIAL = "initial"
-  QUEUED  = "queued"
-  BUSY    = "busy"
-  DONE    = "done"
-  ERROR   = "error"
+  STATUS_INITIAL    = "initial"
+  STATUS_QUEUED     = "queued"
+  STATUS_STARTED    = "started"
+  STATUS_FINISHED   = "finished"
+  STATUS_ERROR      = "error"
+  STATUS_CANCELLED  = "cancelled"
+  VALID_STATUSES    = [STATUS_INITIAL, STATUS_QUEUED, STATUS_STARTED, STATUS_FINISHED, STATUS_ERROR, STATUS_CANCELLED]
 
   belongs_to :user
-  
-  validates :url, presence: true
-  validates :status, inclusion: { in: [INITIAL, QUEUED, BUSY, DONE, ERROR] }
+
+  validates_presence_of :url
+  validates_format_of :url, with: URI::regexp(%w(http https))
+  validates_uniqueness_of :url, scope: :user_id
+  validates_inclusion_of :status, in: VALID_STATUSES
   validate :http_credentials
 
-  scope :last_n, lambda { |n| order(id: :desc).limit(n) }
-  scope :last_10, -> { order(id: :desc).limit(10) }
-  scope :queued, -> { where(status: QUEUED) }
-  scope :busy, -> { where(status: BUSY) }
-  scope :done, -> { where(status: DONE) }
-  scope :error, -> { where(status: ERROR) }
-
+  scope :last_n,    lambda { |n| order(id: :desc).limit(n) }
+  scope :last_10,   -> { order(id: :desc).limit(10) }
+  scope :initial,   -> { where(status: STATUS_INITIAL) }
+  scope :queued,    -> { where(status: STATUS_QUEUED) }
+  scope :started,   -> { where(status: STATUS_STARTED) }
+  scope :finished,  -> { where(status: STATUS_FINISHED) }
+  scope :error,     -> { where(status: STATUS_ERROR) }
+  scope :cancelled, -> { where(status: STATUS_CANCELLED) }
 
   def self.latest
-    [queued.last_n(5), busy.last_n(5), done.last_n(5), error.last_n(5)].compact.flatten
+    [initial.last_n(5), queued.last_n(5), started.last_n(5), finished.last_n(5), error.last_n(5)].compact.flatten
   end
 
-  def run!
+  def queue!    
+    return if queued? || started?
+    Resque.enqueue(DownloadJob, id)
+    queued!
+  end
+
+  def run!    
     begin
-      update_attributes!(started_at: Time.zone.now, status: BUSY)
-      system build_cmd
-      update_attributes!(finished_at: Time.zone.now, status: DONE)
+      return if cancelled?
+      started!
+      Rails.env.development? ? sleep(rand(10)) : system(command)
+      finished!
     rescue => e
-      update_attributes!(finished_at: Time.zone.now, status: ERROR, error: e.message)
-    end
+      error!(e.message)
+    end    
   end
 
-  def queue!
-    DownloadWorker.perform_async(id)
-    update_attributes!(status: QUEUED)
+  def queued!
+    update(status: STATUS_QUEUED, queued_at: Time.zone.now, started_at: nil, finished_at: nil, error: nil)
   end
-
-  IGNORE_ATTRIBUTES = %w{created_at updated_at http_username http_password}
-  def to_json
-    attributes_copy = attributes
-    IGNORE_ATTRIBUTES.each { |attribute| attributes_copy.delete(attribute) }
-    attributes_copy
+  def queued?
+    status == STATUS_QUEUED
+  end
+  def started!    
+    update(status: STATUS_STARTED, started_at: Time.zone.now, finished_at: nil, error: nil)
+  end
+  def started?
+    status == STATUS_STARTED
+  end
+  def finished!
+    update(status: STATUS_FINISHED, finished_at: Time.zone.now)
+  end
+  def error!(message)
+    update(status: STATUS_ERROR, finished_at: Time.zone.now, error: message)
+  end
+  def cancelled!
+    update(status: STATUS_CANCELLED, cancelled_at: Time.zone.now)
+  end
+  def cancelled?
+    status == STATUS_CANCELLED
   end
 
 private
-
-  def cmd
-    File.join(Rails.root, "bin", "opendir_dl.rb")
-  end
-
-  def build_cmd
-    array = ["#{cmd} --output #{ENV["DOWNLOAD_DIRECTORY"]} --no-check-cert"]
-    array << " --user #{self.http_username} --password #{self.http_password} " if http_credentials?
-    array << " \"#{self.url}\" "
-    array.join(" ")
-  end
 
   def http_credentials
     errors.add(:http_username, "no HTTP password set") if http_username.present? && !http_password.present?
@@ -64,6 +78,19 @@ private
   end
 
   def http_credentials?
-    self.http_username.present? && self.http_password.present?
+    http_username.present? && http_password.present?    
+  end
+
+
+  def prep_output_path
+    dir = ENV['OUTPUT_PATH']
+    FileUtils.mkdir_p(dir) unless File.exists?(dir)
+  end
+
+  def command
+    cmd = ["#{cmd} --output #{ENV["DOWNLOAD_DIRECTORY"]} --no-check-cert"]
+    cmd << " --user #{http_username} --password #{http_password} " if http_credentials?
+    cmd << " \"#{url}\" "
+    cmd.join(" ")
   end
 end

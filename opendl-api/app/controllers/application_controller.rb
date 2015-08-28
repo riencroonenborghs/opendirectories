@@ -10,5 +10,4 @@ private
       response.headers[key] = value
     end
   end
-
 end
