@@ -87,7 +87,8 @@ private
   end
 
   def command
-    cmd = ["#{cmd} --output #{ENV["OUTPUT_PATH"]} --no-check-cert"]
+    program = File.join(Rails.root, "bin", "opendir_dl.rb")
+    cmd = ["#{program} --output #{ENV["OUTPUT_PATH"]} --no-check-cert"]
     cmd << " --user #{http_username} --password #{http_password} " if http_credentials?
     cmd << " \"#{url}\" "
     cmd.join(" ")
