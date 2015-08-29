@@ -121,7 +121,7 @@ app.controller "appController", ["$scope", "$rootScope", "$mdMedia", "$http", "$
 
 app.controller "DialogController", ["$scope", "$rootScope", "$mdDialog", "$http", "Server", "Logging",
 ($scope, $rootScope, $mdDialog, $http, Server, Logging) ->
-  $scope.model = {url: ""}
+  $scope.model = {url: "", http_username: "", http_password: ""}
   $scope.forms = {}
   $scope.error = null
   $scope.save = () ->

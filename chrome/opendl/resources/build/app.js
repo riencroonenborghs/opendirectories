@@ -171,7 +171,9 @@
   app.controller("DialogController", [
     "$scope", "$rootScope", "$mdDialog", "$http", "Server", "Logging", function($scope, $rootScope, $mdDialog, $http, Server, Logging) {
       $scope.model = {
-        url: ""
+        url: "",
+        http_username: "",
+        http_password: ""
       };
       $scope.forms = {};
       $scope.error = null;
