@@ -36,7 +36,16 @@ app.controller "appController", ["$scope", "$rootScope", "$mdMedia", "$http", "$
   $scope.Server = Server
   # ---------- authentication ----------
   $scope.path = "Authenticate"
+  $scope.user = null
+
+  parseInitials = ->
+    initials = for split in $scope.user.email.split(/@/)
+      split[0].toUpperCase()
+    $scope.user.initials = initials.slice(0,2).join("")
+
   $auth.validateUser().then (data) ->
+    $scope.user = data
+    parseInitials()
     $scope.getDownloads()
   , () ->
     $mdDialog.show
@@ -46,10 +55,15 @@ app.controller "appController", ["$scope", "$rootScope", "$mdMedia", "$http", "$
   $scope.logOut = ->
     $auth.signOut().then ->
       $scope.downloads = []
+      $scope.user = null
       $mdDialog.show
         templateUrl: "log-in.html"
         controller: "authController"
         clickOutsideToClose: false
+  $rootScope.$on "auth:login-success", (ev, user) ->
+    console.debug user
+    $scope.user = user
+    parseInitials()
 
   # ---------- downloads CRUD ----------
   $rootScope.$on "reload", () ->

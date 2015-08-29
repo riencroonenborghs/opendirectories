@@ -12,16 +12,19 @@ a:hover { cursor: pointer; }
 
 .content { padding: 20px; }   
 .download { padding: 10px; margin-bottom: 5px; }      
-/*md-content.content md-list md-list-item .download { font-size: 12pt; }*/
-/*md-content.content .download .url { word-break: break-word; padding-right: 20px; }*/
 .content .url { word-break: break-word; padding-right: 40px; padding-top: 3px; font-size: 10pt; }
 .content .status-icon { padding-top: 10px; }
 .content .top { padding-top: 16px; }
 .content .times { margin: 0; }
 
+.initials {
+  background-color: #1689C3;
+  border-radius: 5px;
+  padding: 7px;
+  font-size: 9pt;
+  margin-right: 5px;
+  font-weight: bold;
+}
 
-md-sidenav md-input-container { padding: 5px; }
-md-sidenav .close { margin-top: 20px; }
-
-md-dialog { style="padding:10px; width: 75%; }
 .error { color: red; }
+

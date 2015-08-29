@@ -56,10 +56,27 @@
 
   app.controller("appController", [
     "$scope", "$rootScope", "$mdMedia", "$http", "$mdDialog", "Server", "Logging", "$auth", function($scope, $rootScope, $mdMedia, $http, $mdDialog, Server, Logging, $auth) {
-      var deleteDownload;
+      var deleteDownload, parseInitials;
       $scope.Server = Server;
       $scope.path = "Authenticate";
+      $scope.user = null;
+      parseInitials = function() {
+        var initials, split;
+        initials = (function() {
+          var i, len, ref, results;
+          ref = $scope.user.email.split(/@/);
+          results = [];
+          for (i = 0, len = ref.length; i < len; i++) {
+            split = ref[i];
+            results.push(split[0].toUpperCase());
+          }
+          return results;
+        })();
+        return $scope.user.initials = initials.slice(0, 2).join("");
+      };
       $auth.validateUser().then(function(data) {
+        $scope.user = data;
+        parseInitials();
         return $scope.getDownloads();
       }, function() {
         return $mdDialog.show({
@@ -71,6 +88,7 @@
       $scope.logOut = function() {
         return $auth.signOut().then(function() {
           $scope.downloads = [];
+          $scope.user = null;
           return $mdDialog.show({
             templateUrl: "log-in.html",
             controller: "authController",
@@ -78,6 +96,11 @@
           });
         });
       };
+      $rootScope.$on("auth:login-success", function(ev, user) {
+        console.debug(user);
+        $scope.user = user;
+        return parseInitials();
+      });
       $rootScope.$on("reload", function() {
         return $scope.getDownloads();
       });
