@@ -75,10 +75,11 @@
           <div class="md-list-item-text" flex="85">
             <h3 class="url">
               {{ download.url }}
-              <div>
-                <md-button ng-if="download.canDelete" title="delete" ng-click="deleteDownload(download)" aria-label="Delete download"><ng-md-icon icon="delete"></ng-md-icon></md-button>
-                <md-button ng-if="download.canCancel" title="cancel" ng-click="cancelDownload(download)" aria-label="Cancel download"><ng-md-icon icon="cancel"></ng-md-icon></md-button>
-                <md-button ng-if="download.canQueue" title="queue" ng-click="queueDownload(download)" aria-label="Queue download"><ng-md-icon icon="queue"></ng-md-icon></md-button>
+              <div layout="row">
+                <md-button ng-if="download.canCancel" title="cancel" ng-click="cancelDownload(download)" aria-label="Cancel download"><ng-md-icon icon="cancel" style="fill: orange;"></ng-md-icon></md-button>
+                <md-button ng-if="download.canQueue" title="queue" ng-click="queueDownload(download)" aria-label="Queue download"><ng-md-icon icon="queue" style="fill: green;"></ng-md-icon></md-button>
+                <span flex></span>
+                <md-button ng-if="download.canDelete" title="delete" ng-click="deleteDownload(download)" aria-label="Delete download"><ng-md-icon icon="delete" style="fill: red;"></ng-md-icon></md-button>
               </div>
             </h3>            
             <p class="times">
