@@ -97,7 +97,6 @@
         });
       };
       $rootScope.$on("auth:login-success", function(ev, user) {
-        console.debug(user);
         $scope.user = user;
         return parseInitials();
       });

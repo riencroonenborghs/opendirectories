@@ -27,7 +27,7 @@
         <div class="md-toolbar-tools">
           <!-- title -->
           <img src="app.png" style="height: 32px; padding-right: 5px;" />
-          <div class="initials" ng-if="user">{{user.initials}}</div>
+          <div class="initials" ng-if="user" title="Logged in as {{user.email}}">{{user.initials}}</div>
           <h2>
             {{path}}
             <small>
