@@ -37,7 +37,6 @@ app.controller "appController", ["$scope", "$rootScope", "$mdMedia", "$http", "$
   # ---------- authentication ----------
   $scope.path = "Authenticate"
   $scope.user = null
-
   parseInitials = ->
     initials = for split in $scope.user.email.split(/@/)
       split[0].toUpperCase()
@@ -61,7 +60,6 @@ app.controller "appController", ["$scope", "$rootScope", "$mdMedia", "$http", "$
         controller: "authController"
         clickOutsideToClose: false
   $rootScope.$on "auth:login-success", (ev, user) ->
-    console.debug user
     $scope.user = user
     parseInitials()
 
