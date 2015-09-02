@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "OpenDL Downloader",
-  "description": "OpenDL Downloader",
+  "name": "Downloader",
+  "description": "Downloader",
   "version": "1.0",
 
   "browser_action": {

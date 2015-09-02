@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>OpenDL Downloader</title>
+    <title>Downloader</title>
     <script src="js/jquery/jquery-1.11.3.min.js"></script>
     <script src="js/angular/angular.min.js"></script>
     <script src="js/angular/angular-cookie.min.js"></script>
@@ -13,13 +13,14 @@
     <script src="js/angular/angular-material-icons.min.js"></script>
     <script src="js/moment-2.10.3.min.js"></script>
 
-    <script src="build/app.js"></script>     
-    <script src="build/auth.js"></script>     
+    <script src="build/app.js"></script>
+    <script src="build/auth.js"></script>
+    <script src="build/downloads.js"></script>
     
     <link rel="stylesheet" type="text/css" href="css/angular-material.min.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">
   </head>
-  <body ng-app="opendl-downloader" ng-controller="appController">
+  <body ng-app="downloader" ng-controller="appController">
 
     <!-- main panel -->
     <md-content>
@@ -29,14 +30,14 @@
           <img src="app.png" style="height: 32px; padding-right: 5px;" />
           <div class="initials" ng-if="user" title="Logged in as {{user.email}}">{{user.initials}}</div>
           <h2>
-            {{path}}
+            Downloader
             <small>
               ({{Server.service.toString()}})
             </small>
           </h2>
           <!-- menu icon -->
           <span flex></span>
-          <span ng-if="path == 'Downloads'">
+          <span ng-if="user">
             <a ng-href="#" ng-click="getDownloads()">
               <ng-md-icon icon="refresh" style="fill: white"></ng-md-icon>
             </a>
@@ -45,7 +46,7 @@
             </a>
             <a ng-href="#" ng-click="logOut()">
               <ng-md-icon icon="logout" style="fill: white"></ng-md-icon>
-            </a>            
+            </a>
           </span>
         </div>
       </md-toolbar>

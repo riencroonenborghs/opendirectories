@@ -1,51 +1,49 @@
-app = angular.module "opendl-downloader", [
+app = angular.module "downloader", [
   "ng-token-auth",
   "ngAria", 
   "ngAnimate", 
   "ngMaterial", 
   "ngMdIcons",
-  "opendl-downloader.auth"
+  "downloader.auth",
+  "downloader.downloads"
 ]
 
-icons = {initial: "cloud_circle", queued: "cloud", started: "cloud_download", finished: "done", error: "error", cancelled: "cloud_off"}
+icons =
+  initial: "cloud_circle"
+  queued: "cloud"
+  started: "cloud_download"
+  finished: "done"
+  error: "error"
+  cancelled: "cloud_off"
 debug = true
 
-app.service "Logging", [->
-  debug: (message) ->
-    console.debug message if debug
-]
-
-server = "localhost"
-port = 3000
-
-app.factory "Server", [->
+app.constant "SERVER", "localhost"
+app.constant "PORT", 3000
+app.factory "Server", [ "SERVER", "PORT", (SERVER, PORT) ->
   service:
-    toString: -> "http://#{@server}:#{@port}"
-    server: server
-    port: port
-    build: (path) ->
-      "http://#{@server}:#{@port}#{path}"
+    toString: -> "http://#{SERVER}:#{PORT}"
+    build: (path) -> "http://#{SERVER}:#{PORT}#{path}"
 ] 
 
-app.config ($authProvider) ->
+app.config ($authProvider, SERVER, PORT) ->
   $authProvider.configure
-    apiUrl: "http://#{server}:#{port}"
+    apiUrl: "http://#{SERVER}:#{PORT}"
 
-app.controller "appController", ["$scope", "$rootScope", "$mdMedia", "$http", "$mdDialog", "Server", "Logging", "$auth",
-($scope, $rootScope, $mdMedia, $http, $mdDialog, Server, Logging, $auth) ->
+app.controller "appController", ["$scope", "$rootScope", "$mdMedia", "$http", "$mdDialog", "Server", "$auth",
+($scope, $rootScope, $mdMedia, $http, $mdDialog, Server, $auth) ->
   $scope.Server = Server
-  # ---------- authentication ----------
-  $scope.path = "Authenticate"
+
+  # ---------- authentication ----------  
   $scope.user = null
-  parseInitials = ->
+  setUser = (user) ->
+    $scope.user = user
     initials = for split in $scope.user.email.split(/@/)
       split[0].toUpperCase()
     $scope.user.initials = initials.slice(0,2).join("")
-
+    
   $auth.validateUser().then (data) ->
-    $scope.user = data
-    parseInitials()
-    $scope.getDownloads()
+    setUser(data)
+    $scope.getDownloads() 
   , () ->
     $mdDialog.show
       templateUrl: "log-in.html"
@@ -53,21 +51,24 @@ app.controller "appController", ["$scope", "$rootScope", "$mdMedia", "$http", "$
       clickOutsideToClose: false
   $scope.logOut = ->
     $auth.signOut().then ->
-      $scope.downloads = []
-      $scope.user = null
       $mdDialog.show
         templateUrl: "log-in.html"
         controller: "authController"
         clickOutsideToClose: false
+
   $rootScope.$on "auth:login-success", (ev, user) ->
-    $scope.user = user
-    parseInitials()
+    setUser(user)
+    $scope.getDownloads()
+
+  $rootScope.$on "auth:logout-success", (ev) ->
+    $scope.user = null
+    $scope.downloads = []
 
   # ---------- downloads CRUD ----------
-  $rootScope.$on "reload", () ->
+  $rootScope.$on "downloads.get", () ->
     $scope.getDownloads()
+
   $scope.getDownloads = ->    
-    $scope.path = "Downloads"
     $http
       method: "GET"
       url: Server.service.build("/api/v1/downloads.json")
@@ -85,16 +86,14 @@ app.controller "appController", ["$scope", "$rootScope", "$mdMedia", "$http", "$
       $scope.downloads = data
 
   $scope.newDownload = ($event) ->
-    $scope.path = "New Download"
     $mdDialog.show
       templateUrl: "new-download.html"
-      controller: "DialogController"
+      controller: "NewDownloadController"
       clickOutsideToClose: false
     .then ->
       $scope.getDownloads()
 
   $scope.deleteDownload = (download, $event) ->
-    $scope.path = "Delete Download"
     confirm = $mdDialog.confirm()
       .title("Delete Download")
       .content("Are you sure you want to delete '#{download.url}'?")
@@ -126,30 +125,4 @@ app.controller "appController", ["$scope", "$rootScope", "$mdMedia", "$http", "$
       url: Server.service.build("/api/v1/downloads/#{download.id}/queue")
       dataType: "jsonp"
     .success () -> $scope.getDownloads()
-
-  
-
-]
-
-app.controller "DialogController", ["$scope", "$rootScope", "$mdDialog", "$http", "Server", "Logging",
-($scope, $rootScope, $mdDialog, $http, Server, Logging) ->
-  $scope.model = {url: "", http_username: "", http_password: ""}
-  $scope.forms = {}
-  $scope.error = null
-  $scope.save = () ->
-    Logging.debug "post"
-    data = {download: $scope.model}
-    $http
-      method: "POST"
-      url: Server.service.build("/api/v1/downloads.json")
-      data: data
-    .then () ->
-      $rootScope.$broadcast("reload")
-      $rootScope.$emit("reload")
-      $mdDialog.hide()
-      return
-    , (message) ->      
-      $scope.error = message.data.error
-      return
-  $scope.close = -> $mdDialog.hide()
 ]

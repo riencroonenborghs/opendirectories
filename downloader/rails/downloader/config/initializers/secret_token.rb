@@ -16,4 +16,4 @@
 # Using secret_token for rails3 compatibility. Change to secret_key_base
 # to avoid deprecation warning.
 # Can be safely removed in a rails3 api-only application.
-OpendlApi::Application.config.secret_token = '51d59b8a0e5d47ed2d109533e65d8b3843db726967b2f787a15d52d6b62b5401b395c3f1812b3f13dc5fe7ba133123b53128feaa0a0ac98cc1d31e32660e3754'
+Downloader::Application.config.secret_token = '51d59b8a0e5d47ed2d109533e65d8b3843db726967b2f787a15d52d6b62b5401b395c3f1812b3f13dc5fe7ba133123b53128feaa0a0ac98cc1d31e32660e3754'

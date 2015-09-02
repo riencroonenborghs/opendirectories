@@ -34,10 +34,20 @@ class Download < ActiveRecord::Base
   end
 
   def run!    
+    prep_output_path!
+
     begin
       return if cancelled?
       started!
-      Rails.env.development? ? sleep(rand(10)) : system(command)
+      if Rails.env.development?
+        puts "-------------------------------"
+        puts "download_type: #{download_type}"
+        puts download_command
+        puts "-------------------------------"
+        sleep(rand(10))
+      else
+        system(download_command) if download_command
+      end
       finished!
     rescue => e
       error!(e.message)
@@ -80,17 +90,65 @@ private
     http_username.present? && http_password.present?    
   end
 
-
-  def prep_output_path
+  def prep_output_path!
     dir = ENV['OUTPUT_PATH']
     FileUtils.mkdir_p(dir) unless File.exists?(dir)
   end
 
-  def command
+  def download_type
+    @download_type ||= begin
+      if url =~ /youtube\.com/
+        :youtube 
+      elsif url =~ /mega\.nz|mega\.co\.nz/
+        :mega
+      elsif url =~ /iplayer/
+        :bbc_iplayer
+      else 
+        :opendir_dl
+      end
+    end
+  end
+
+  def download_command
+    @download_command ||= begin
+      case download_type
+      when :youtube
+        youtube_dl_command
+      when :mega
+        # TODO
+        nil
+      when :bbc_iplayer
+        iplayer_command
+      when :opendir_dl
+        opendir_dl_command
+      end
+    end
+  end
+
+  def youtube_dl_command
+    program = "youtube-dl"
+    cmd = [program]
+    cmd << "--continue --output \"#{ENV["OUTPUT_PATH"]}/%(title)s-%(id)s.%(ext)s\""
+    cmd << "\"#{url}\" "
+    cmd.join(" ")
+  end
+
+  def mega_nz_command
+  end
+
+  def opendir_dl_command
     program = File.join(Rails.root, "bin", "opendir_dl.rb")
-    cmd = ["ruby #{program} --output #{ENV["OUTPUT_PATH"]} --no-check-cert"]
-    cmd << " --user #{http_username} --password #{http_password} " if http_credentials?
-    cmd << " \"#{url}\" "
+    cmd = ["ruby #{program} --output \"#{ENV["OUTPUT_PATH"]}\" --no-check-cert"]
+    cmd << "--user #{http_username} --password #{http_password}" if http_credentials?
+    cmd << "\"#{url}\" "
+    cmd.join(" ")
+  end
+
+  def iplayer_command
+    cmd = ["get_iplayer"]
+    cmd << "--proxy #{ENV['PROXY']}" if ENV['PROXY']
+    cmd << "--get \"#{url}\" --force --modes best"
+    cmd << "--output \"#{ENV['OUTPUT_PATH']}\""
     cmd.join(" ")
   end
 end
