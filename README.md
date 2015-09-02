@@ -25,7 +25,7 @@ The Chrome Extension has more features. The Add-on search is pretty basic, but g
 Install the Extension like above. Somewhere in the sources there's a `SERVER` and `PORT` constant. Change it to your needs. There's a `build.sh` to help you out afterwards.
 
 Deploy the Rails 4 App like any other app.
-The Rails 4 App requires both [get_iplayer](https://github.com/get-iplayer/get_iplayer) and [youtube-dl](https://github.com/rg3/youtube-dl) to do the heavy lifting.
+The Rails 4 App requires both [get_iplayer](https://github.com/get-iplayer/get_iplayer) and [youtube-dl](https://github.com/rg3/youtube-dl) to do the heavy lifting. [Resque](https://github.com/resque/resque) does the queue handling.
 
 ## Scripts
 Two scripts that are basically a wrapper around `wget` and `get_iplayer`.
