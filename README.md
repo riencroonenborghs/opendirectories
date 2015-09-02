@@ -12,6 +12,7 @@ The Chrome Extension has more features. The Add-on search is pretty basic, but g
 - click `Load unpacked extension...` *(top left)*
 - point it to the extension *(the folder with the manifest.json file)*
 - click `Select`
+
 ### How to install the Firefox Add-on
 - go to `about:addons`
 - click settings button next to the search field *(top right)* and select `Install Add-on From File...`
