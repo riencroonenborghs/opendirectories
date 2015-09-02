@@ -22,7 +22,7 @@ The Chrome Extension has more features. The Add-on search is pretty basic, but g
 ## Acquire data
 ... through a [Chrome Extension](https://github.com/riencroonenborghs/opendirectories/tree/master/downloader/chrome/downloader) and a [Rails 4 App](https://github.com/riencroonenborghs/opendirectories/tree/master/downloader/rails/downloader). It handles regular URLs, BBC iPlayer videos and Youtube videos.
 
-Install the Extension like above. 
+Install the Extension like above. Somewhere in the sources there's a `SERVER` and `PORT` constant. Change it to your needs. There's a `build.sh` to help you out afterwards.
 
 Deploy the Rails 4 App like any other app.
 The Rails 4 App requires both [get_iplayer](https://github.com/get-iplayer/get_iplayer) and [youtube-dl](https://github.com/rg3/youtube-dl) to do the heavy lifting.
