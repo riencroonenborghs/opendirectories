@@ -1,59 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <title>Opendirectories by riencroonenborghs</title>
 
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    <title>Opendirectories by riencroonenborghs</title>
   </head>
-
   <body>
-    <header>
-      <div class="inner">
+    <div class="wrapper">
+      <header>
         <h1>Opendirectories</h1>
-        <h2>wget, Ruby on Rails, AngularJS and Google</h2>
-        <a href="https://github.com/riencroonenborghs/opendirectories" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
+        <p>wget, Ruby on Rails, AngularJS and Google</p>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1>
-<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h1>
+        <p class="view"><a href="https://github.com/riencroonenborghs/opendirectories">View the Project on GitHub <small>riencroonenborghs/opendirectories</small></a></p>
 
-<p>This repository features:</p>
 
-<ul>
-<li>a <a href="https://github.com/riencroonenborghs/opendirectories/tree/master/chrome/opendirectories">Chrome extension</a> and a <a href="https://github.com/riencroonenborghs/opendirectories/tree/master/firefox">Firefox add-on</a> for searches</li>
-<li>a <a href="https://github.com/riencroonenborghs/opendirectories/tree/master/chrome/opendl">Chrome extension</a> and <a href="https://github.com/riencroonenborghs/opendirectories/tree/master/opendl-api">Ruby on Rails app</a> for acquisition</li>
-<li>a Ruby wrapper around <code>wget</code> for acquisition</li>
-</ul>
+        <ul>
+          <li><a href="https://github.com/riencroonenborghs/opendirectories/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/riencroonenborghs/opendirectories/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/riencroonenborghs/opendirectories">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="opendirectories" class="anchor" href="#opendirectories" aria-hidden="true"><span class="octicon octicon-link"></span></a>Opendirectories</h1>
 
-<h1>
-<a id="compile" class="anchor" href="#compile" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compile</h1>
-
-<p>The search Chrome extension and Firefox add-on should work straight out of the box. </p>
-
-<p>The acquisition extension is written in coffeescript. To compile run:</p>
-
-<pre><code>coffee -o build -c src/*
-</code></pre>
-
-<h1>
-<a id="how-to-install" class="anchor" href="#how-to-install" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to install</h1>
+<p>... is a bunch of tools to help facilitate <a href="https://github.com/riencroonenborghs/opendirectories/tree/master/opendirectories">search</a> and <a href="https://github.com/riencroonenborghs/opendirectories/tree/master/downloader">acquisition</a> of data.</p>
 
 <h2>
-<a id="chrome-extension" class="anchor" href="#chrome-extension" aria-hidden="true"><span class="octicon octicon-link"></span></a>Chrome extension</h2>
+<a id="search-data" class="anchor" href="#search-data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Search data</h2>
+
+<p>... through a <a href="https://github.com/riencroonenborghs/opendirectories/tree/master/opendirectories/chrome">Chrome Extension</a> or a <a href="https://github.com/riencroonenborghs/opendirectories/tree/master/opendirectories/firefox">Firefox Add-on</a>. </p>
+
+<p>The Chrome Extension has more features. The Add-on search is pretty basic, but gets the job done.</p>
+
+<h3>
+<a id="how-to-install-the-chrome-extension" class="anchor" href="#how-to-install-the-chrome-extension" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to install the Chrome Extension</h3>
 
 <ul>
 <li>go to <code>chrome://extensions</code>
@@ -68,8 +56,8 @@
 </li>
 </ul>
 
-<h2>
-<a id="firefox-add-on" class="anchor" href="#firefox-add-on" aria-hidden="true"><span class="octicon octicon-link"></span></a>Firefox add-on</h2>
+<h3>
+<a id="how-to-install-the-firefox-add-on" class="anchor" href="#how-to-install-the-firefox-add-on" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to install the Firefox Add-on</h3>
 
 <ul>
 <li>go to <code>about:addons</code>
@@ -83,77 +71,27 @@
 </ul>
 
 <h2>
-<a id="ruby-on-rails-app" class="anchor" href="#ruby-on-rails-app" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ruby on Rails app</h2>
+<a id="acquire-data" class="anchor" href="#acquire-data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Acquire data</h2>
 
-<p>Simple and easy steps:</p>
+<p>... through a <a href="https://github.com/riencroonenborghs/opendirectories/tree/master/downloader/chrome/downloader">Chrome Extension</a> and a <a href="https://github.com/riencroonenborghs/opendirectories/tree/master/downloader/rails/downloader">Rails 4 App</a>. It handles regular URLs, BBC iPlayer videos and Youtube videos.</p>
 
-<ul>
-<li>clone the repository</li>
-</ul>
+<p>Install the Extension like above. Somewhere in the sources there's a <code>SERVER</code> and <code>PORT</code> constant. Change it to your needs. There's a <code>build.sh</code> to help you out afterwards.</p>
 
-<pre><code>git clone https://github.com/riencroonenborghs/opendirectories/tree/master/opendl-api
-</code></pre>
+<p>Deploy the Rails 4 App like any other app.
+The Rails 4 App requires both <a href="https://github.com/get-iplayer/get_iplayer">get_iplayer</a> and <a href="https://github.com/rg3/youtube-dl">youtube-dl</a> to do the heavy lifting. <a href="https://github.com/resque/resque">Resque</a> does the queue handling.</p>
 
-<ul>
-<li>bundle install</li>
-</ul>
+<h2>
+<a id="scripts" class="anchor" href="#scripts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Scripts</h2>
 
-<pre><code>cd opendl-api
-bundle install
-</code></pre>
-
-<ul>
-<li>create and migrate the database</li>
-</ul>
-
-<pre><code>rake db:create db:migrate
-</code></pre>
-
-<ul>
-<li>in the Rails console: create a user</li>
-</ul>
-
-<pre><code>User.create email: "some@email.com", password: "itsasecret", password_confirmation: "itsasecret", provider: "email"
-</code></pre>
-
-<ul>
-<li>fire up sidekiq (in <code>screen</code> or separate terminal)</li>
-</ul>
-
-<pre><code>screen &lt;ENTER&gt;
-sidekiq
-CTRL+A
-D
-</code></pre>
-
-<ul>
-<li>fire up the server</li>
-</ul>
-
-<pre><code>./bin/rails server
-</code></pre>
-
-<p>Now you're good to go</p>
-        </section>
-
-        <aside id="sidebar">
-          <a href="https://github.com/riencroonenborghs/opendirectories/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/riencroonenborghs/opendirectories/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
-
-          <p class="repo-owner"><a href="https://github.com/riencroonenborghs/opendirectories"></a> is maintained by <a href="https://github.com/riencroonenborghs">riencroonenborghs</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
+<p>Two scripts that are basically a wrapper around <code>wget</code> and <code>get_iplayer</code>.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/riencroonenborghs">riencroonenborghs</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-
-            <script type="text/javascript">
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
