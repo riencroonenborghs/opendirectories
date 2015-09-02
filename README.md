@@ -1,59 +1,30 @@
-# Features
-This repository features:
-- a [Chrome extension](https://github.com/riencroonenborghs/opendirectories/tree/master/chrome/opendirectories) and a [Firefox add-on](https://github.com/riencroonenborghs/opendirectories/tree/master/firefox) for searches
-- a [Chrome extension](https://github.com/riencroonenborghs/opendirectories/tree/master/chrome/opendl) and [Ruby on Rails app](https://github.com/riencroonenborghs/opendirectories/tree/master/opendl-api) for acquisition
+# Opendirectories
+... is a bunch of tools to help facilitate [search](https://github.com/riencroonenborghs/opendirectories/tree/master/opendirectories) and [acquisition](https://github.com/riencroonenborghs/opendirectories/tree/master/downloader) of data.
 
-# Compile
-The search Chrome extension and Firefox add-on should work straight out of the box. 
+## Search data
+... through a [Chrome Extension](https://github.com/riencroonenborghs/opendirectories/tree/master/opendirectories/chrome) or a [Firefox Add-on](https://github.com/riencroonenborghs/opendirectories/tree/master/opendirectories/firefox). 
 
-The acquisition extension is written in coffeescript. To compile run:
-```
-coffee -o build -c src/*
-```
+The Chrome Extension has more features. The Add-on search is pretty basic, but gets the job done.
 
-# How to install
-
-## Chrome extension
+### How to install the Chrome Extension
 - go to `chrome://extensions`
 - check `Developer mode` *(top right)*
 - click `Load unpacked extension...` *(top left)*
 - point it to the extension *(the folder with the manifest.json file)*
 - click `Select`
-
-## Firefox add-on
+### How to install the Firefox Add-on
 - go to `about:addons`
 - click settings button next to the search field *(top right)* and select `Install Add-on From File...`
 - point it to the extension *(the folder with the manifest.json file)*
 - click `Open`
 
-## Ruby on Rails app
-Simple and easy steps:
-- clone the repository
-```
-git clone https://github.com/riencroonenborghs/opendirectories/tree/master/opendl-api
-```
-- bundle install
-```
-cd opendl-api
-bundle install
-```
-- create and migrate the database
-```
-rake db:create db:migrate
-```
-- in the Rails console: create a user
-```
-User.create email: "some@email.com", password: "itsasecret", password_confirmation: "itsasecret", provider: "email"
-```
-- fire up sidekiq (in `screen` or separate terminal)
-```
-screen <ENTER>
-sidekiq
-CTRL+A
-D
-```
-- fire up the server
-```
-./bin/rails server
-```
-Now you're good to go
+## Acquire data
+... through a [Chrome Extension](https://github.com/riencroonenborghs/opendirectories/tree/master/downloader/chrome/downloader) and a [Rails 4 App](https://github.com/riencroonenborghs/opendirectories/tree/master/downloader/rails/downloader). It handles regular URLs, BBC iPlayer videos and Youtube videos.
+
+Install the Extension like above. 
+
+Deploy the Rails 4 App like any other app.
+The Rails 4 App requires both [get_iplayer](https://github.com/get-iplayer/get_iplayer) and [youtube-dl](https://github.com/rg3/youtube-dl) to do the heavy lifting.
+
+## Scripts
+Two scripts that are basically a wrapper around `wget` and `get_iplayer`.
