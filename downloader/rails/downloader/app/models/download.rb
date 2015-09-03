@@ -10,7 +10,7 @@ class Download < ActiveRecord::Base
   belongs_to :user
 
   validates_presence_of :url
-  validates_format_of :url, with: URI::regexp(%w(http https))
+  validates_format_of :url, with: URI::regexp(%w(http https ftp))
   validates_inclusion_of :status, in: VALID_STATUSES
   validate :http_credentials
 
