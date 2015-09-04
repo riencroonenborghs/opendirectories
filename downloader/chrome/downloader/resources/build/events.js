@@ -3,7 +3,7 @@
   chrome.runtime.onInstalled.addListener(function(details) {
     var options;
     options = {
-      title: "Add to Downloader",
+      title: "Queue in Downloader",
       contexts: ["link"],
       id: "Downloader"
     };
@@ -11,7 +11,7 @@
     chrome.contextMenus.create(options);
     return chrome.contextMenus.onClicked.addListener(function(info, tab) {
       return angular.element("body").scope().Server.service.create({
-        url: tab.url
+        url: info.linkUrl
       });
     });
   });

@@ -6,4 +6,4 @@ chrome.runtime.onInstalled.addListener (details) ->
   chrome.contextMenus.remove options.id
   chrome.contextMenus.create options
   chrome.contextMenus.onClicked.addListener (info, tab) ->
-    angular.element("body").scope().Server.service.create({url: tab.url})
+    angular.element("body").scope().Server.service.create({url: info.linkUrl})
