@@ -49,4 +49,9 @@ class Api::V1::DownloadsController < ApplicationController
       render nothing: true, status: 422
     end
   end
+
+  def clear
+    current_user.downloads.for_clearing.map(&:destroy)
+    render nothing: true, status: 200
+  end
 end

@@ -10,6 +10,9 @@ Rails.application.routes.draw do
           put :cancel
           put :queue
         end
+        collection do
+          post :clear
+        end
       end
     end
   end

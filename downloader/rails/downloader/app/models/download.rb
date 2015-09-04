@@ -22,6 +22,7 @@ class Download < ActiveRecord::Base
   scope :finished,  -> { where(status: STATUS_FINISHED) }
   scope :error,     -> { where(status: STATUS_ERROR) }
   scope :cancelled, -> { where(status: STATUS_CANCELLED) }
+  scope :for_clearing, -> { where(status: [STATUS_FINISHED, STATUS_ERROR, STATUS_CANCELLED] ) }
 
   def self.latest
     [initial.last_n(5), queued.last_n(5), started.last_n(5), finished.last_n(5), error.last_n(5)].compact.flatten
