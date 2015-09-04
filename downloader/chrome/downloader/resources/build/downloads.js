@@ -14,20 +14,15 @@
       $scope.forms = {};
       $scope.error = null;
       $scope.save = function() {
-        var data;
-        data = {
-          download: $scope.model
-        };
-        return $http({
-          method: "POST",
-          url: Server.service.build("/api/v1/downloads.json"),
-          data: data
-        }).then(function() {
+        var failure, success;
+        success = function() {
           $rootScope.$broadcast("downloads.get");
-          $mdDialog.hide();
-        }, function(message) {
-          $scope.error = message.data.error;
-        });
+          return $mdDialog.hide();
+        };
+        failure = function(message) {
+          return $scope.error = message;
+        };
+        return Server.service.create($scope.model).then(success, failure);
       };
       return $scope.close = function() {
         return $mdDialog.hide();

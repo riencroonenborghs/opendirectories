@@ -3,7 +3,7 @@
 
   "name": "Downloader",
   "description": "Downloader",
-  "version": "1.0",
+  "version": "1.6",
 
   "browser_action": {
     "default_icon": "resources/app.png",
@@ -12,6 +12,14 @@
   "permissions": [
     "activeTab",
     "storage",
-    "http://*/"
-  ]
+    "http://*/",
+    "contextMenus"
+  ],
+  "icons": {
+    "16": "resources/app.png"
+  },
+  "background": {
+    "page": "resources/background.html",
+    "persistent": false
+  }
 }

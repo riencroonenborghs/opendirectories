@@ -6,17 +6,11 @@ app.controller "NewDownloadController", ["$scope", "$rootScope", "$mdDialog", "$
   $scope.forms = {}
   $scope.error = null
   $scope.save = () ->
-    data = {download: $scope.model}
-    $http
-      method: "POST"
-      url: Server.service.build("/api/v1/downloads.json")
-      data: data
-    .then () ->
+    success = ->
       $rootScope.$broadcast("downloads.get")
       $mdDialog.hide()
-      return
-    , (message) ->      
-      $scope.error = message.data.error
-      return
+    failure = (message) ->
+      $scope.error = message
+    Server.service.create($scope.model).then success, failure
   $scope.close = -> $mdDialog.hide()
 ]

@@ -14,6 +14,7 @@
     <script src="js/moment-2.10.3.min.js"></script>
 
     <script src="build/app.js"></script>
+    <script src="build/server.js"></script>
     <script src="build/auth.js"></script>
     <script src="build/downloads.js"></script>
     
@@ -62,6 +63,7 @@
         {{downloads.error}} Error - 
         {{downloads.cancelled}} Cancelled - 
         {{downloads.total}} Total
+        <md-button class="md-warn" ng-click="clearDownloads()">clear</md-button>
       </md-subheader>
       <md-list>
         <md-list-item class="md-whiteframe-z1 md-3-line download" ng-repeat="download in downloads.items" layout="row">          
