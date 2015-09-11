@@ -9,7 +9,8 @@
       $scope.model = {
         url: "",
         http_username: "",
-        http_password: ""
+        http_password: "",
+        file_filter: ""
       };
       $scope.forms = {};
       $scope.error = null;

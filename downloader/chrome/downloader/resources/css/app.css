@@ -1,4 +1,4 @@
-body { min-width: 500px; min-height: 375px; }
+body { min-width: 500px; min-height: 450px; }
 .new-download { min-width: 80%; }
 .authenticate { min-width: 80%; }
 a:hover { cursor: pointer; }

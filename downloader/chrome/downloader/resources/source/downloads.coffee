@@ -2,7 +2,7 @@ app = angular.module "downloader.downloads", []
 
 app.controller "NewDownloadController", ["$scope", "$rootScope", "$mdDialog", "$http", "Server",
 ($scope, $rootScope, $mdDialog, $http, Server) ->
-  $scope.model = {url: "", http_username: "", http_password: ""}
+  $scope.model = {url: "", http_username: "", http_password: "", file_filter: ""}
   $scope.forms = {}
   $scope.error = null
   $scope.save = () ->

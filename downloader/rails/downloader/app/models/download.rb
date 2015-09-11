@@ -141,6 +141,7 @@ private
     program = File.join(Rails.root, "bin", "opendir_dl.rb")
     cmd = ["ruby #{program} --output \"#{ENV["OUTPUT_PATH"]}\" --no-check-cert"]
     cmd << "--user #{http_username} --password #{http_password}" if http_credentials?
+    cmd << "--files \"#{file_filter}\"" if file_filter.present?
     cmd << "\"#{url}\" "
     cmd.join(" ")
   end

@@ -14,7 +14,7 @@ class Api::V1::DownloadsController < ApplicationController
   end
 
   def create
-    download = current_user.downloads.build(params.require(:download).permit(:url, :http_username, :http_password))      
+    download = current_user.downloads.build(params.require(:download).permit(:url, :http_username, :http_password, :file_filter))      
     if download.save
       download.queue!
       render nothing: true, status: 200
