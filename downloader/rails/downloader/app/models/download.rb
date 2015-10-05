@@ -80,6 +80,16 @@ class Download < ActiveRecord::Base
     status == STATUS_CANCELLED
   end
 
+  def to_json
+    hash = Hash.new.tap do |ret|
+      attributes.map do |key, value|
+        ret[key] = value
+      end
+    end
+    hash["user"] = {id: user_id, email: user.email}
+    hash
+  end
+
 private
 
   def http_credentials
