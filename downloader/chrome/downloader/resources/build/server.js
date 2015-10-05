@@ -33,7 +33,6 @@
                 results = [];
                 for (i = 0, len = ref.length; i < len; i++) {
                   item = ref[i];
-                  item = JSON.parse(item);
                   item.visible = false;
                   item.icon = ICONS[item.status];
                   item.hasPointer = item.status !== "initial" && item.status !== "queued";

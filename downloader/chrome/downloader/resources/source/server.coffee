@@ -15,7 +15,6 @@ app.factory "Server", [ "SERVER", "PORT", "ICONS", "$http", "$q", (SERVER, PORT,
         dataType: "jsonp"
       .success (data) -> 
         data.items = for item in data.items
-          item = JSON.parse(item)
           item.visible = false
           item.icon = ICONS[item.status]
           item.hasPointer = (item.status != "initial" && item.status != "queued")
