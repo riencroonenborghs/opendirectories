@@ -27,7 +27,7 @@
 ## Downloader
 
 - Has a server and client part
-- The server is written in Rails 4, requires both [get_iplayer](https://github.com/get-iplayer/get_iplayer) and [youtube-dl](https://github.com/rg3/youtube-dl) to do the heavy lifting. [Resque](https://github.com/resque/resque) does the queue handling. It handles regular URLs, BBC iPlayer videos and Youtube videos. BBC iPlayer does require the correct location or a proxy (`.env`'s PROXY key).
+- The server is written in Rails 4, requires [wget](https://www.gnu.org/software/wget/), [get_iplayer](https://github.com/get-iplayer/get_iplayer) and [youtube-dl](https://github.com/rg3/youtube-dl) to do the heavy lifting. [Resque](https://github.com/resque/resque) does the queue handling. It handles regular URLs, BBC iPlayer videos and Youtube videos. BBC iPlayer does require the correct location or a proxy (`.env`'s PROXY key).
 - The client is a Chrome extension and is written in plain HTML, coffeescript and AngularJS. `build.sh` converts the coffeescript into javascript. Somewhere in the sources there's a `SERVER` and `PORT` constant. Change it to your needs.
 
 ### Screenshots
