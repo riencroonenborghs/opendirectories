@@ -1,1 +1,1 @@
-coffee -o resources/build -c resources/source/*
+coffee -o app/assets/javascripts/build -c app/assets/javascripts/source/*

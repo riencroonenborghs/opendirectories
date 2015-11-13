@@ -1,7 +1,5 @@
-app = angular.module "downloader.server", []
+app = angular.module "downloader.server.factories", []
 
-app.constant "SERVER", "localhost"
-app.constant "PORT", 3000
 app.factory "Server", [ "SERVER", "PORT", "ICONS", "$http", "$q", (SERVER, PORT, ICONS, $http, $q) ->
   service:
     toString: -> "http://#{SERVER}:#{PORT}"

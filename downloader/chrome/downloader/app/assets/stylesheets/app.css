@@ -1,0 +1,54 @@
+body { 
+  min-width: 500px; 
+  /*height: 450px; */
+}
+.new-download { min-width: 80%; }
+.authenticate { min-width: 80%; }
+a:hover { cursor: pointer; }
+
+.pointer { cursor: pointer; }
+
+.content { padding: 20px; }   
+.download { padding: 10px; margin-bottom: 5px; }      
+.content .url { word-break: break-word; padding-right: 40px; padding-top: 3px; font-size: 10pt; }
+/*.content .status-icon { padding-top: 10px; }*/
+.content .top { padding-top: 16px; }
+.content .times { margin: 0; }
+
+.initials {
+  background-color: #1689C3;
+  border-radius: 5px;
+  padding: 7px;
+  font-size: 9pt;
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.error { color: red; }
+
+
+
+/* ----- TABS ----- */
+.tab.initial { fill: rgb(190, 190, 21);}
+.tab.queued { fill: orange;}
+.tab.busy { fill: lightgreen;}
+.tab.done { fill: darkgreen;}
+.tab.error { fill: red; }
+
+/* ----- DOWNLOAD LIST ----- */
+#main-content .tab-body { padding: 2px; }
+#main-content button.md-fab { background: none; box-shadow: none; margin: 0px; }
+#main-content .number {
+  font-size: 6pt;
+  background: #589DCD;
+  border: 1px solid #60808D;
+  color: white;
+  border-radius: 50%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  position: relative;
+  right: 12px;
+  bottom: 16px;
+}

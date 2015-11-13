@@ -1,0 +1,27 @@
+<md-dialog aria-label="Authenticate" class="authenticate" ng-cloack>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h3>Authenticate</h3>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <md-content class="md-dialog-content">
+      <div layout="column">
+        <md-input-container>
+          <label>Email</label>
+          <input ng-model="model.email" id="email" />
+        </md-input-container>
+
+        <md-input-container>
+          <label>Password</label>
+          <input type="password" ng-model="model.password" />
+        </md-input-container>
+      </div>
+      <div layout="row">
+        <span class="error">{{error}}</span>
+        <span flex></span>
+        <md-button ng-click="logIn()" class="md-primary">Log in</md-button>
+      </div>
+    </md-content>    
+  </md-dialog-content>
+</md-dialog>

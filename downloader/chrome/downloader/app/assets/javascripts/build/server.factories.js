@@ -2,11 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module("downloader.server", []);
-
-  app.constant("SERVER", "localhost");
-
-  app.constant("PORT", 3000);
+  app = angular.module("downloader.server.factories", []);
 
   app.factory("Server", [
     "SERVER", "PORT", "ICONS", "$http", "$q", function(SERVER, PORT, ICONS, $http, $q) {

@@ -3,11 +3,11 @@
 
   "name": "Downloader",
   "description": "Downloader",
-  "version": "1.20",
+  "version": "2.3",
 
   "browser_action": {
-    "default_icon": "resources/app.png",
-    "default_popup": "resources/app.html"
+    "default_icon": "app/assets/images/app.png",
+    "default_popup": "app/views/app.html"
   },
   "permissions": [
     "activeTab",
@@ -16,10 +16,10 @@
     "contextMenus"
   ],
   "icons": {
-    "16": "resources/app.png"
+    "16": "app/assets/images/app.png"
   },
   "background": {
-    "page": "resources/background.html",
+    "page": "app/views/background.html",
     "persistent": false
   }
 }
