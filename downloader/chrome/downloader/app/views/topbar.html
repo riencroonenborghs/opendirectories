@@ -5,15 +5,15 @@
       <!-- title -->
       <img src="../assets/images/app.png" style="height: 32px; padding-right: 5px;" />
       <div class="initials" ng-if="user" title="Logged in as {{user.email}}">{{user.initials}}</div>
-      <h2>
+      <h2 title="{{Server.service.toString()}}">
         Downloader
-        <small>
-          ({{Server.service.toString()}})
-        </small>
       </h2>
       <!-- menu icon -->
       <span flex></span>
       <span ng-if="user">
+        <a ng-href="#" ng-click="clearDownloads()">
+          <ng-md-icon icon="clear_all" style="fill: white"></ng-md-icon>
+        </a>
         <a ng-href="#" ng-click="getDownloads()">
           <ng-md-icon icon="refresh" style="fill: white"></ng-md-icon>
         </a>

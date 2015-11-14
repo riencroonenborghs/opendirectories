@@ -1,6 +1,5 @@
 body { 
   min-width: 500px; 
-  /*height: 450px; */
 }
 .new-download { min-width: 80%; }
 .authenticate { min-width: 80%; }
@@ -9,11 +8,6 @@ a:hover { cursor: pointer; }
 .pointer { cursor: pointer; }
 
 .content { padding: 20px; }   
-.download { padding: 10px; margin-bottom: 5px; }      
-.content .url { word-break: break-word; padding-right: 40px; padding-top: 3px; font-size: 10pt; }
-/*.content .status-icon { padding-top: 10px; }*/
-.content .top { padding-top: 16px; }
-.content .times { margin: 0; }
 
 .initials {
   background-color: #1689C3;
@@ -51,4 +45,7 @@ a:hover { cursor: pointer; }
   position: relative;
   right: 12px;
   bottom: 16px;
+}
+#main-content .download { 
+  word-break: break-all;
 }

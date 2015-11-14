@@ -7,36 +7,44 @@
       </md-tab-label>
       <md-tab-body>
         <md-content class="tab-body">
-          <md-list>
-            <md-list-item class="md-whiteframe-z1 download" ng-repeat="download in downloads.items | filter: {status: tab.title}">
-              <div class="md-list-item-text" layout="column">
-                <h3 class="url pointer" ng-click="download.visible = !download.visible">
-                  {{ download.url }}<br />
-                  <small>Added by {{download.user.email}}</small>              
-                </h3>
-                <div layout="row">
-                  <md-button class="md-fab md-mini" ng-if="download.canCancel" title="cancel" ng-click="cancelDownload(download)" aria-label="Cancel download"><ng-md-icon icon="cancel" style="fill: orange;"></ng-md-icon></md-button>
-                  <md-button class="md-fab md-mini" ng-if="download.canQueue" title="queue" ng-click="queueDownload(download)" aria-label="Queue download"><ng-md-icon icon="queue" style="fill: green;"></ng-md-icon></md-button>
-                  <!-- <span flex></span> -->
-                  <md-button class="md-fab md-mini" ng-if="download.canDelete" title="delete" ng-click="deleteDownload(download)" aria-label="Delete download"><ng-md-icon icon="delete" style="fill: red;"></ng-md-icon></md-button>
-                </div>
-                <p class="times">
-                  <div ng-if="download.visible">
-                    <div ng-if="download.started_at">
-                      Started at: {{ download.started_at | date : 'dd MMM yyyy H:mm'}}
+          <table cellspacing="8px" cellpadding="4px">
+            <tbody>
+              <tr ng-repeat="download in downloads.items | filter: {status: tab.title}">
+                <td class="download md-whiteframe-z1">
+                  <div layout="row">
+                    <div layout="row">
+                      <md-button class="md-fab md-mini" ng-if="download.canCancel" title="cancel" ng-click="cancelDownload(download)" aria-label="Cancel download"><ng-md-icon icon="cancel" style="fill: orange;"></ng-md-icon></md-button>
+                      <md-button class="md-fab md-mini" ng-if="download.canQueue" title="queue" ng-click="queueDownload(download)" aria-label="Queue download"><ng-md-icon icon="queue" style="fill: green;"></ng-md-icon></md-button>
+                      <!-- <span flex></span> -->
+                      <md-button class="md-fab md-mini" ng-if="download.canDelete" title="delete" ng-click="deleteDownload(download)" aria-label="Delete download"><ng-md-icon icon="delete" style="fill: red;"></ng-md-icon></md-button>
                     </div>
-                    <div ng-if="download.finished_at">
-                      Finished at: {{ download.finished_at | date : 'dd MMM yyyy H:mm'}}
-                    </div>
-                    <div ng-if="download.error" class="error">
-                      <h2>Error</h2>
-                      <p>{{download.error}}</p>
-                    </div>
+                    <span class="pointer" ng-click="download.visible = !download.visible">{{download.url}}</span>
                   </div>
-                </p>
-              </div>
-            </md-list-item>
-          </md-list>
+                  <div>
+                    <small>
+                      Added by {{download.user.email}} on {{download.created_at | date: "EEEE, dd MMMM, hh:mma"}}
+                    </small>
+                  </div>
+                  <div ng-if="download.visible">
+                    <small>
+                      <div ng-if="download.started_at">
+                        Started at: {{ download.started_at | date : "EEEE, dd MMMM, hh:mma"}}
+                      </div>
+                      <div ng-if="download.finished_at">
+                        Finished at: {{ download.finished_at | date : "EEEE, dd MMMM, hh:mma"}}
+                      </div>
+                      <div ng-if="download.error" class="error">
+                        <h2>Error</h2>
+                        <p>{{download.error}}</p>
+                      </div>
+                    </small>
+                  </div>
+                  
+                  
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </md-content>
 
       </md-tab-body>
