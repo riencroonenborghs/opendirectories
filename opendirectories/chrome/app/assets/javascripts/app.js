@@ -1,5 +1,5 @@
 var app = angular.module("opendirectories", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons"]);
-var blacklist = ["watchtheshows.com", "mmnt.net", "listen77.com", "unknownsecret.info", "trimediacentral.com", "wallywashis.name", "ch0c.com"];
+var blacklist = ["watchtheshows.com", "mmnt.net", "listen77.com", "unknownsecret.info", "trimediacentral.com", "wallywashis.name", "ch0c.com", "hypem.com"];
 var query_types = [{name: "Movies", exts: "avi,mp4,divx,mkv"}, {name: "Music", exts: "mp3,flac,aac"}, {name: "Books", exts: "pdf,epub,mob"}, {name: "General", exts: ""}];
 
 app.controller("appController", ["$scope", "$mdMedia", "$mdSidenav", function($scope, $mdMedia, $mdSidenav){

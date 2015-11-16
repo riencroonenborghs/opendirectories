@@ -3,15 +3,22 @@
 <html>
   <head>
     <title>Opendirectories</title>
-    <script src="js/angular.min.js"></script>
-    <script src="js/angular-animate.min.js"></script>
-    <script src="js/angular-aria.min.js"></script>
-    <script src="js/angular-material.min.js"></script>
-    <script src="js/angular-material-icons.min.js"></script>
-    <script src="js/app.js"></script> 
+    
+    <script src="../assets/javascripts/angular/angular.min.js"></script>
+    <script src="../assets/javascripts/angular/angular-animate.min.js"></script>
+    <script src="../assets/javascripts/angular/angular-aria.min.js"></script>
+    <script src="../assets/javascripts/angular/angular-material.min.js"></script>
+    <script src="../assets/javascripts/angular/angular-material-icons.min.js"></script>
+    
+    <script src="../assets/javascripts/build/app.js"></script>
+    <script src="../assets/javascripts/build/controllers.js"></script>
+    <script src="../assets/javascripts/build/services.js"></script>
+    <script src="../assets/javascripts/build/menu.controllers.js"></script>
+    <script src="../assets/javascripts/build/blacklist.controllers.js"></script>
+    <script src="../assets/javascripts/build/query_types.controllers.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/angular-material.min.css">
-    <link rel="stylesheet" type="text/css" href="css/app.css">
+    <link rel="stylesheet" type="text/css" href="../assets/stylesheets/angular-material.min.css">
+    <link rel="stylesheet" type="text/css" href="../assets/stylesheets/app.css">
   </head>
   <body ng-app="opendirectories" ng-controller="appController">
 
@@ -22,12 +29,12 @@
           <!-- title -->
           <h2>
             Opendirectories
-            <ng-md-icon ng-if="query" icon="chevron_right" size="14" style="fill: white"></ng-md-icon>
-            {{query}}
+            <ng-md-icon ng-if="model.query" icon="chevron_right" size="14" style="fill: white"></ng-md-icon>
+            {{model.query}}
           </h2>
           <!-- menu icon -->
           <span flex></span>
-          <a ng-href="#" ng-click="show_menu()">
+          <a ng-href="#" ng-click="showMenu()">
             <ng-md-icon icon="more_vert" style="fill: white"></ng-md-icon>
           </a>
         </div>
@@ -40,16 +47,16 @@
         <!-- title -->
         <md-toolbar class="md-theme-light">
           <h1 class="md-toolbar-tools">
-            <span ng-if="!blacklist && !query_types"> 
+            <span ng-if="!blacklist && !queryTypes"> 
               Menu
             </span>
             <span ng-if="blacklist"> 
-              <a ng-href="#" ng-click="show_links()">
+              <a ng-href="#" ng-click="showLinks()">
                 <ng-md-icon icon="arrow_back" size="14" style="fill: white"></ng-md-icon> Blacklist URLs
               </a>
             </span>
-            <span ng-if="query_types"> 
-              <a ng-href="#" ng-click="show_links()">
+            <span ng-if="queryTypes"> 
+              <a ng-href="#" ng-click="showLinks()">
                 <ng-md-icon icon="arrow_back" size="14" style="fill: white"></ng-md-icon> Query Types
               </a>
             </span>
@@ -59,30 +66,30 @@
         <!-- menu content -->
         <md-content layout-padding>
           <!-- main menu items -->
-          <div ng-if="!query_types && !blacklist">
+          <div ng-if="!queryTypes && !blacklist">
             <md-list>
               <md-list-item class="md-2-line">
                 <div class="md-list-item-text">
-                  <md-button ng-click="show_blacklist()">Blacklist URLs</md-button>
+                  <md-button ng-click="showBlacklist()">Blacklist URLs</md-button>
                 </div>
               </md-list-item>
               <md-list-item class="md-2-line">
                 <div class="md-list-item-text">
-                  <md-button ng-click="show_query_types()">Query Types</md-button>
+                  <md-button ng-click="showQueryTypes()">Query Types</md-button>
                 </div>
               </md-list-item>
             </md-list>
           </div>
 
           <!-- query types -->
-          <div ng-if="query_types" ng-controller="queryTypesController">
+          <div ng-if="queryTypes" ng-controller="queryTypesController">
             <!-- list -->
             <md-list>
-              <md-list-item ng-repeat="query_type in query_types track by $index" layout="row">
-                <a ng-href="#" ng-click="remove(query_type)" flex="10">
+              <md-list-item ng-repeat="queryType in queryTypes track by $index" layout="row">
+                <a ng-href="#" ng-click="remove(queryType)" flex="10">
                   <ng-md-icon icon="delete" size="16"></ng-md-icon>
                 </a>
-                <span flex>{{query_type.name}} ({{query_type.exts}})</span>
+                <span flex>{{queryType.name}} ({{queryType.exts}})</span>
               </md-list-item>
             </md-list>
 
@@ -91,13 +98,13 @@
               <div layout="row">
                 <md-input-container flex="75">
                   <label>Name</label>
-                  <md-input ng-model="name"></md-input>          
+                  <md-input ng-model="model.name"></md-input>          
                 </md-input-container>
               </div>
               <div layout="row">
                 <md-input-container flex="75">
                   <label>Comma-separated extensions</label>
-                  <md-input ng-model="exts"></md-input>          
+                  <md-input ng-model="model.exts"></md-input>          
                 </md-input-container>
                 <md-button ng-click="add()" flex="25">Add</md-button>  
               </div>
@@ -120,7 +127,7 @@
             <div layout="row">
               <md-input-container flex="75">
                 <label>Blacklist URL</label>
-                <md-input ng-model="url"></md-input>          
+                <md-input ng-model="model.url"></md-input>          
               </md-input-container>
               <md-button ng-click="add()" flex="25">Add</md-button>  
             </div>
@@ -139,33 +146,33 @@
       <div layout="row">
         <md-input-container>
           <label>Query</label>
-          <input type="text" ng-model="query" />
+          <input type="text" ng-model="model.query" />
         </md-input-container>    
         <md-button ng-click="search()">
-          <span ng-hide="small">Search</span>
+          Search
         </md-button>
       </div>
 
       <!-- search types + options -->
       <div layout="row">
-        <md-select ng-model="query_type" flex="20">
-          <md-option ng-repeat="query_type in query_types track by $index" value="{{$index}}">{{query_type.name}}</md-option>
+        <md-select ng-model="model.queryType" flex="20">
+          <md-option ng-repeat="queryType in model.queryTypes track by $index" value="{{$index}}">{{queryType.name}}</md-option>
         </md-select>    
-        <md-checkbox ng-model="alternative" aria-label="Alternative">
+        <md-checkbox ng-model="model.alternative" aria-label="Alternative">
           Alternative Search Method
         </md-checkbox>
-        <md-checkbox ng-model="quoted" aria-label="Quoted">
+        <md-checkbox ng-model="model.quoted" aria-label="Quoted">
           Quoted
         </md-checkbox>
-        <md-checkbox ng-model="incognito" aria-label="Incognito">
+        <md-checkbox ng-model="model.incognito" aria-label="Incognito">
           Incognito
         </md-checkbox>
       </div>
 
       <!-- query itself -->
-      <md-card ng-if="query" class="query">
+      <md-card ng-if="model.query" class="query">
         About to query:
-        <small>{{build_query()}}</small>
+        <small>{{buildQuery()}}</small>
       </md-card>  
     </md-content>
 
