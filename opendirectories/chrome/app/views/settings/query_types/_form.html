@@ -1,0 +1,17 @@
+<md-content class="md-padding new-query-type">
+  <form name="form">
+    <md-input-container>
+      <label>Name</label>
+      <input type="text" ng-model="model.name" required />
+    </md-input-container>
+    <md-input-container>
+      <label>Extensions</label>
+      <input type="text" ng-model="model.exts" required />
+    </md-input-container>
+    <div layout="row">
+      <span flex></span>
+      <md-button ng-click="visit('/settings/queryTypes')">Cancel</md-button>
+      <md-button class="md-primary md-raised" ng-click="save()">{{formLabel}}</md-button>
+    </div>
+  </form>
+</md-content>

@@ -43,6 +43,12 @@
     }).when("/settings/queryTypes", {
       templateUrl: "app/views/settings/query_types/index.html",
       controller: "QueryTypesIndexController"
+    }).when("/settings/queryTypes/new", {
+      templateUrl: "app/views/settings/query_types/new.html",
+      controller: "QueryTypeNewController"
+    }).when("/settings/queryTypes/:index", {
+      templateUrl: "app/views/settings/query_types/edit.html",
+      controller: "QueryTypeEditController"
     }).otherwise({
       templateUrl: "app/views/index.html",
       controller: "appController"
