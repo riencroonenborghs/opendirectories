@@ -1,0 +1,31 @@
+<md-content class="md-padding search" layout="column">
+
+  <div layout="row">
+    <md-input-container flex="80">
+      <label>Query</label>
+      <input id="query" type="text" ng-model="model.query" />
+    </md-input-container>    
+    <md-button  flex="20" ng-click="search()">
+      Search
+    </md-button>
+  </div>
+
+  <div layout="row">
+    <md-select ng-model="model.queryType" flex="20" aria-label="Query types">
+      <md-option ng-repeat="queryType in model.queryTypes track by $index" value="{{$index}}">{{queryType.name}}</md-option>
+    </md-select>    
+    <md-checkbox ng-model="model.alternative" aria-label="Alternative">
+      Alternative Search Method
+    </md-checkbox>
+    <md-checkbox ng-model="model.quoted" aria-label="Quoted">
+      Quoted
+    </md-checkbox>
+    <md-checkbox ng-model="model.incognito" aria-label="Incognito">
+      Incognito
+    </md-checkbox>
+  </div>
+
+  <md-card ng-if="model.query" class="query">
+    <md-card-content>{{buildQuery()}}</md-card-content>
+  </md-card>  
+</md-content>

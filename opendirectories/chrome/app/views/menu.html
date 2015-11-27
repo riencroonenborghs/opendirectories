@@ -1,0 +1,97 @@
+<!-- menu panel -->
+<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">      
+  <div ng-controller="menuController" >
+    <!-- title -->
+    <md-toolbar class="md-theme-light">
+      <h1 class="md-toolbar-tools">
+        <span ng-if="!blacklist && !queryTypes"> 
+          Menu
+        </span>
+        <span ng-if="blacklist"> 
+          <a ng-href="#" ng-click="showLinks()">
+            <ng-md-icon icon="arrow_back" size="14" style="fill: white"></ng-md-icon> Blacklist URLs
+          </a>
+        </span>
+        <span ng-if="queryTypes"> 
+          <a ng-href="#" ng-click="showLinks()">
+            <ng-md-icon icon="arrow_back" size="14" style="fill: white"></ng-md-icon> Query Types
+          </a>
+        </span>
+      </h1>
+    </md-toolbar>
+
+    <!-- menu content -->
+    <md-content layout-padding>
+      <!-- main menu items -->
+      <div ng-if="!queryTypes && !blacklist">
+        <md-list>
+          <md-list-item class="md-2-line">
+            <div class="md-list-item-text">
+              <md-button ng-click="showBlacklist()">Blacklist URLs</md-button>
+            </div>
+          </md-list-item>
+          <md-list-item class="md-2-line">
+            <div class="md-list-item-text">
+              <md-button ng-click="showQueryTypes()">Query Types</md-button>
+            </div>
+          </md-list-item>
+        </md-list>
+      </div>
+
+      <!-- query types -->
+      <div ng-if="queryTypes" ng-controller="queryTypesController">
+        <!-- list -->
+        <md-list>
+          <md-list-item ng-repeat="queryType in queryTypes track by $index" layout="row">
+            <a ng-href="#" ng-click="remove(queryType)" flex="10">
+              <ng-md-icon icon="delete" size="16"></ng-md-icon>
+            </a>
+            <span flex>{{queryType.name}} ({{queryType.exts}})</span>
+          </md-list-item>
+        </md-list>
+
+        <!-- add -->
+        <div layout="column">
+          <div layout="row">
+            <md-input-container flex="75">
+              <label>Name</label>
+              <md-input ng-model="model.name"></md-input>          
+            </md-input-container>
+          </div>
+          <div layout="row">
+            <md-input-container flex="75">
+              <label>Comma-separated extensions</label>
+              <md-input ng-model="model.exts"></md-input>          
+            </md-input-container>
+            <md-button ng-click="add()" flex="25">Add</md-button>  
+          </div>
+        </div>
+      </div>
+
+      <!-- blacklist -->
+      <div ng-if="blacklist" ng-controller="blacklistController">
+        <!-- list -->
+        <md-list>
+          <md-list-item ng-repeat="item in blacklist" layout="row">
+            <a ng-href="#" ng-click="remove(item)" flex="10">
+              <ng-md-icon icon="delete" size="16"></ng-md-icon>
+            </a>
+            <span flex>{{item}}</span>
+          </md-list-item>
+        </md-list>
+
+        <!-- add -->
+        <div layout="row">
+          <md-input-container flex="75">
+            <label>Blacklist URL</label>
+            <md-input ng-model="model.url"></md-input>          
+          </md-input-container>
+          <md-button ng-click="add()" flex="25">Add</md-button>  
+        </div>
+      </div>
+
+      <!-- close menu -->
+      <md-button ng-click="close()" class="close md-primary">Close</md-button>
+    </md-content>
+  </div>
+</md-sidenav>

@@ -8,16 +8,57 @@
     function() {
       return {
         service: {
-          store: function(key, list) {
-            var data;
-            data = {};
-            data[key] = JSON.stringify(list);
-            return chrome.storage.sync.set(data);
+          addToList: function(key, item) {
+            return chrome.storage.local.get(key, function(data) {
+              var list, newData;
+              list = [];
+              if (data[key]) {
+                list = JSON.parse(data[key]);
+              }
+              list.push(item);
+              newData = {};
+              newData[key] = JSON.stringify(list);
+              chrome.storage.local.set(newData);
+            });
           },
-          removeAndStore: function(key, list, item) {
-            list.splice(list.indexOf(item), 1);
-            return this.store(key, list);
+          removeAndStore: function(list, key, index) {
+            var newData;
+            list.splice(index, 1);
+            newData = {};
+            newData[key] = JSON.stringify(list);
+            chrome.storage.local.set(newData);
+          },
+          update: function(list, key, item, index) {
+            var newData;
+            list[index] = item;
+            newData = {};
+            newData[key] = JSON.stringify(list);
+            return chrome.storage.local.set(newData);
           }
+        }
+      };
+    }
+  ]);
+
+  app.service("Topbar", [
+    function() {
+      return {
+        back: null,
+        title: null,
+        subtitles: [],
+        reset: function() {
+          this.back = null;
+          this.title = null;
+          return this.subtitles = [];
+        },
+        linkBackTo: function(url) {
+          return this.back = url;
+        },
+        setTitle: function(t) {
+          return this.title = t;
+        },
+        addSubtitle: function(t) {
+          return this.subtitles.push(t);
         }
       };
     }

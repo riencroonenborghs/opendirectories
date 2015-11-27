@@ -19,24 +19,31 @@ class Google
     if queryType.exts == "" then "" else " (#{queryType.exts.split(',').join("|")}) "
 
 
-app.controller "appController", ["$scope", "$mdMedia", "$mdSidenav", "DEFAULT_BLACKLIST", "DEFAULT_QUERY_TYPES",
-($scope, $mdMedia, $mdSidenav, DEFAULT_BLACKLIST, DEFAULT_QUERY_TYPES) ->
+app.controller "appController", ["$scope", "$mdMedia", "$mdSidenav", "$timeout", "$location", "DEFAULT_SETTINGS", "Topbar",
+($scope, $mdMedia, $mdSidenav, $timeout, $location, DEFAULT_SETTINGS, Topbar) ->
   $scope.model =
     query:        null
-    queryTypes:   DEFAULT_QUERY_TYPES
+    queryTypes:   $.extend([], DEFAULT_SETTINGS.QUERY_TYPES)
     queryType:    0
     alternative:  false
     quoted:       true
     incognito:    true
-    blacklist:    DEFAULT_BLACKLIST
+    blacklist:    $.extend([], DEFAULT_SETTINGS.BLACKLIST)
+  
+  $scope.Topbar = Topbar
+  Topbar.reset()
+  Topbar.setTitle "Opendirectories"
 
+  # chrome.storage.local.clear()
   loadFromChrome = ->
-    chrome.storage.sync.get "blacklist", (data) ->
+    chrome.storage.local.get "blacklist", (data) ->
       if data.blacklist
-        $scope.model.blacklist = JSON.parse data.blacklist      
-    chrome.storage.sync.get "queryTypes", (data) ->
+        for item in JSON.parse(data.blacklist)
+          $scope.model.blacklist.push item
+    chrome.storage.local.get "queryTypes", (data) ->
       if data.queryTypes
-        $scope.model.queryTypes = JSON.parse data.queryTypes
+        for item in JSON.parse(data.queryTypes)
+          $scope.model.queryTypes.push item
   loadFromChrome()
   $scope.$on "reload.chrome", -> loadFromChrome()
 
@@ -47,6 +54,8 @@ app.controller "appController", ["$scope", "$mdMedia", "$mdSidenav", "DEFAULT_BL
       chrome.windows.create
         url: new Google($scope.model).buildUrl(),
         incognito: $scope.model.incognito
+  
+  $scope.visit = (url) -> $location.path url
 
-  $scope.showMenu = -> $mdSidenav('right').toggle()
+  $timeout (-> $(".search #query").focus()), 500
 ]  

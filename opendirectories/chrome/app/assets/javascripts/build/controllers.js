@@ -45,26 +45,43 @@
   })();
 
   app.controller("appController", [
-    "$scope", "$mdMedia", "$mdSidenav", "DEFAULT_BLACKLIST", "DEFAULT_QUERY_TYPES", function($scope, $mdMedia, $mdSidenav, DEFAULT_BLACKLIST, DEFAULT_QUERY_TYPES) {
+    "$scope", "$mdMedia", "$mdSidenav", "$timeout", "$location", "DEFAULT_SETTINGS", "Topbar", function($scope, $mdMedia, $mdSidenav, $timeout, $location, DEFAULT_SETTINGS, Topbar) {
       var loadFromChrome;
       $scope.model = {
         query: null,
-        queryTypes: DEFAULT_QUERY_TYPES,
+        queryTypes: $.extend([], DEFAULT_SETTINGS.QUERY_TYPES),
         queryType: 0,
         alternative: false,
         quoted: true,
         incognito: true,
-        blacklist: DEFAULT_BLACKLIST
+        blacklist: $.extend([], DEFAULT_SETTINGS.BLACKLIST)
       };
+      $scope.Topbar = Topbar;
+      Topbar.reset();
+      Topbar.setTitle("Opendirectories");
       loadFromChrome = function() {
-        chrome.storage.sync.get("blacklist", function(data) {
+        chrome.storage.local.get("blacklist", function(data) {
+          var i, item, len, ref, results;
           if (data.blacklist) {
-            return $scope.model.blacklist = JSON.parse(data.blacklist);
+            ref = JSON.parse(data.blacklist);
+            results = [];
+            for (i = 0, len = ref.length; i < len; i++) {
+              item = ref[i];
+              results.push($scope.model.blacklist.push(item));
+            }
+            return results;
           }
         });
-        return chrome.storage.sync.get("queryTypes", function(data) {
+        return chrome.storage.local.get("queryTypes", function(data) {
+          var i, item, len, ref, results;
           if (data.queryTypes) {
-            return $scope.model.queryTypes = JSON.parse(data.queryTypes);
+            ref = JSON.parse(data.queryTypes);
+            results = [];
+            for (i = 0, len = ref.length; i < len; i++) {
+              item = ref[i];
+              results.push($scope.model.queryTypes.push(item));
+            }
+            return results;
           }
         });
       };
@@ -83,9 +100,12 @@
           });
         }
       };
-      return $scope.showMenu = function() {
-        return $mdSidenav('right').toggle();
+      $scope.visit = function(url) {
+        return $location.path(url);
       };
+      return $timeout((function() {
+        return $(".search #query").focus();
+      }), 500);
     }
   ]);
 

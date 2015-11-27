@@ -1,0 +1,28 @@
+<md-content class="md-padding blacklist">
+  <md-list>
+    <md-list-item ng-repeat="item in blacklist.default" class="md-padding-mini md-whiteframe-1dp blacklist">
+      <p>{{item}}</p>
+    </md-list-item>
+    <md-list-item ng-repeat="item in blacklist.chrome" class="md-padding-mini md-whiteframe-1dp blacklist">
+      <p>{{item}}</p>
+      <div>
+        <md-button aria-label="Edit Blacklist" class="md-icon-button md-mini" ng-click="edit($index)">
+          <ng-md-icon icon="mode_edit" size="14"></ng-md-icon>
+        </md-button>
+        <md-button aria-label="Delete Blacklist" class="md-icon-button md-mini" ng-click="delete($index)">
+          <ng-md-icon icon="delete" size="14" style="fill: red;"></ng-md-icon>
+        </md-button>
+      </div>
+    </md-list-item>
+  </md-list>
+</md-content>
+
+<md-content>
+  <md-fab-speed-dial md-open="false" md-direction="up" ng-class="md-fling">
+    <md-fab-trigger>
+      <md-button aria-label="Add Blacklist" class="md-fab md-primary" ng-click="visit('/settings/blacklist/new')">
+        <ng-md-icon icon="add" size="14" style="fill: white;"></ng-md-icon>
+      </md-button>
+    </md-fab-trigger>
+  </md-fab-speed-dial>  
+</md-content>

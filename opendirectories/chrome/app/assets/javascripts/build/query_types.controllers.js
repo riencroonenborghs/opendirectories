@@ -4,36 +4,12 @@
 
   app = angular.module("opendirectories.queryTypes.controllers", ["opendirectories.services"]);
 
-  app.controller("queryTypesController", [
-    "$scope", "$rootScope", "DEFAULT_QUERY_TYPES", "ListService", function($scope, $rootScope, DEFAULT_QUERY_TYPES, ListService) {
-      $scope.queryTypes = DEFAULT_QUERY_TYPES;
-      chrome.storage.sync.get("queryTypes", function(data) {
-        if (data.queryTypes) {
-          return $scope.queryTypes = JSON.parse(data.queryTypes);
-        }
-      });
-      $scope.model = {
-        name: null,
-        exts: null
-      };
-      $scope.add = function() {
-        if ($scope.model.name && $scope.model.exts) {
-          $scope.queryTypes.push({
-            name: $scope.model.name,
-            exts: $scope.model.exts
-          });
-          $scope.model = {
-            name: null,
-            exts: null
-          };
-          ListService.service.store("queryTypes", $scope.queryTypes);
-          return $rootScope.$broadcast("reload.chrome");
-        }
-      };
-      return $scope.remove = function(item) {
-        ListService.service.removeAndStore("queryTypes", $scope.queryTypes, item);
-        return $rootScope.$broadcast("reload.chrome");
-      };
+  app.controller("QueryTypesIndexController", [
+    "$scope", "DEFAULT_QUERY_TYPES", "ListService", "Topbar", function($scope, DEFAULT_QUERY_TYPES, ListService, Topbar) {
+      Topbar.reset();
+      Topbar.linkBackTo("/");
+      Topbar.setTitle("Settings");
+      return Topbar.addSubtitle("Query Types");
     }
   ]);
 

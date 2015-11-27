@@ -1,0 +1,37 @@
+<md-content class="topbar">
+  <md-toolbar>
+    <div class="md-toolbar-tools">      
+      <h2>
+        <span>
+          <md-button aria-label="Go Back" class="md-icon-button" ng-if="Topbar.back" ng-click="visit(Topbar.back)">
+            <ng-md-icon icon="arrow_back" size="14" style="fill: white"></ng-md-icon>
+          </md-button>
+          {{Topbar.title}}          
+          <span ng-if="Topbar.subtitles.length > 0" ng-repeat="subtitle in Topbar.subtitles">
+            <ng-md-icon icon="chevron_right" size="14" style="fill: white"></ng-md-icon>
+            {{subtitle}}
+          </span>
+        </span>
+      </h2>
+      <span flex></span>
+
+      <md-menu>
+        <md-button aria-label="Settings" class="settings md-icon-button" ng-click="$mdOpenMenu($event)">
+          <ng-md-icon icon="more_vert" style="fill: white;"></ng-md-icon>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item>
+            <md-button aria-label="Blacklist Settings" ng-click="visit('/settings/blacklist')">
+              Blacklist settings
+            </md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button aria-label="Query Type Settings" ng-click="visit('/settings/queryTypes')">
+              Query Types settings
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
+  </md-toolbar>
+</md-content>    
