@@ -6,6 +6,7 @@ app = angular.module "opendirectories", [
   "ngRoute",
   "opendirectories.controllers",
   "opendirectories.services",
+  "opendirectories.directives",
   "opendirectories.blacklist.controllers",
   "opendirectories.queryTypes.controllers"
 ]

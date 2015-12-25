@@ -3,7 +3,7 @@
   <div layout="row">
     <md-input-container flex="80">
       <label>Query</label>
-      <input id="query" type="text" ng-model="model.query" />
+      <input id="query" type="text" ng-model="model.query" ng-enter="search()" />
     </md-input-container>    
     <md-button  flex="20" ng-click="search()">
       Search
