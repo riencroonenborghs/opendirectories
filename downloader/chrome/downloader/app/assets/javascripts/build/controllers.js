@@ -2,9 +2,9 @@
 (function() {
   var app;
 
-  app = angular.module("downloader.controllers", ["downloader.constants"]);
+  app = angular.module("downloader.controllers", []);
 
-  app.controller("appController", [
+  app.controller("AppController", [
     "$scope", "$rootScope", "$mdDialog", "$controller", "Server", "ICONS", function($scope, $rootScope, $mdDialog, $controller, Server, ICONS) {
       var icon, label;
       $scope.Server = Server;

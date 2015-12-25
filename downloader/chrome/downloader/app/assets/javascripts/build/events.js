@@ -14,10 +14,15 @@
 
   chrome.contextMenus.onClicked.addListener(function(info, tab) {
     if (tab) {
-      alert("Queued " + info.linkUrl);
-      return angular.element("body").scope().Server.service.create({
+      alert(angular);
+      alert(angular.element("body"));
+      alert(angular.element("body").scope());
+      alert(angular.element("body").scope().Server);
+      alert(angular.element("body").scope().Server.service);
+      angular.element("body").scope().Server.service.create({
         url: info.linkUrl
       });
+      return alert("Queued " + info.linkUrl);
     }
   });
 

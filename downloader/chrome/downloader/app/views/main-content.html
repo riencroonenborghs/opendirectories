@@ -1,4 +1,4 @@
-<md-content class="content" id="main-content">
+<md-content class="content" id="content">
   <md-tabs md-selected="selectedIndex" md-border-bottom md-primary>
     <md-tab ng-repeat="tab in tabs">
       <md-tab-label>
@@ -6,46 +6,34 @@
         <span class="number">{{downloads[tab.title]}}</span>
       </md-tab-label>
       <md-tab-body>
-        <md-content class="tab-body">
-          <table cellspacing="8px" cellpadding="4px">
-            <tbody>
-              <tr ng-repeat="download in downloads.items | filter: {status: tab.title}">
-                <td class="download md-whiteframe-z1">
-                  <div layout="row">
-                    <div layout="row">
-                      <md-button class="md-fab md-mini" ng-if="download.canCancel" title="cancel" ng-click="cancelDownload(download)" aria-label="Cancel download"><ng-md-icon icon="cancel" style="fill: orange;"></ng-md-icon></md-button>
-                      <md-button class="md-fab md-mini" ng-if="download.canQueue" title="queue" ng-click="queueDownload(download)" aria-label="Queue download"><ng-md-icon icon="queue" style="fill: green;"></ng-md-icon></md-button>
-                      <!-- <span flex></span> -->
-                      <md-button class="md-fab md-mini" ng-if="download.canDelete" title="delete" ng-click="deleteDownload(download)" aria-label="Delete download"><ng-md-icon icon="delete" style="fill: red;"></ng-md-icon></md-button>
-                    </div>
-                    <span class="pointer" ng-click="download.visible = !download.visible">{{download.url}}</span>
-                  </div>
-                  <div>
-                    <small>
-                      Added by {{download.user.email}} on {{download.created_at | date: "EEEE, dd MMMM, hh:mma"}}
-                    </small>
-                  </div>
-                  <div ng-if="download.visible">
-                    <small>
-                      <div ng-if="download.started_at">
-                        Started at: {{ download.started_at | date : "EEEE, dd MMMM, hh:mma"}}
-                      </div>
-                      <div ng-if="download.finished_at">
-                        Finished at: {{ download.finished_at | date : "EEEE, dd MMMM, hh:mma"}}
-                      </div>
-                      <div ng-if="download.error" class="error">
-                        <h2>Error</h2>
-                        <p>{{download.error}}</p>
-                      </div>
-                    </small>
-                  </div>
-                  
-                  
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </md-content>
+
+        <md-list class="md-padding">
+          <md-list-item ng-repeat="download in downloads.items | filter: {status: tab.title}" class="md-3-line">
+            <div class="md-avatar" layout="column">
+              <md-button class="md-fab md-mini" ng-if="download.canCancel" title="cancel" ng-click="cancelDownload(download)" aria-label="Cancel download"><ng-md-icon icon="cancel" style="fill: orange;"></ng-md-icon></md-button>
+              <md-button class="md-fab md-mini" ng-if="download.canQueue" title="queue" ng-click="queueDownload(download)" aria-label="Queue download"><ng-md-icon icon="queue" style="fill: green;"></ng-md-icon></md-button>
+              <!-- <span flex></span> -->
+              <md-button class="md-fab md-mini" ng-if="download.canDelete" title="delete" ng-click="deleteDownload(download)" aria-label="Delete download"><ng-md-icon icon="delete" style="fill: red;"></ng-md-icon></md-button>
+            </div>
+
+            <div class="md-list-item-text">
+              <h3 class="pointer" ng-click="download.visible = !download.visible">{{download.url}}</h3>
+              <h4>Added by {{download.user.email}} on {{download.created_at | date: "EEEE, dd MMMM, hh:mma"}}</h4>
+              <p>
+                <div ng-if="download.visible && download.started_at">
+                  Started at: {{ download.started_at | date : "EEEE, dd MMMM, hh:mma"}}
+                </div>
+                <div ng-if="download.visible && download.finished_at">
+                  Finished at: {{ download.finished_at | date : "EEEE, dd MMMM, hh:mma"}}
+                </div>
+                <div ng-if="download.visible && download.error" class="error">
+                  <h2>Error</h2>
+                  <p>{{download.error}}</p>
+                </div>              
+              </p>
+            </div>
+          </md-list-item>
+        </md-list>
 
       </md-tab-body>
     </md-tab>

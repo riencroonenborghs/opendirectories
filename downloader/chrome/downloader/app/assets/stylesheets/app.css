@@ -1,13 +1,8 @@
-body { 
-  min-width: 500px; 
-}
-.new-download { min-width: 80%; }
-.authenticate { min-width: 80%; }
-a:hover { cursor: pointer; }
+body { min-width: 500px; }
 
+md-padding { padding: 16px; }
 .pointer { cursor: pointer; }
-
-.content { padding: 20px; }   
+.error { color: red; }
 
 .initials {
   background-color: #1689C3;
@@ -18,21 +13,13 @@ a:hover { cursor: pointer; }
   font-weight: bold;
 }
 
-.error { color: red; }
 
-
-
-/* ----- TABS ----- */
 .tab.initial { fill: rgb(190, 190, 21);}
 .tab.queued { fill: orange;}
 .tab.busy { fill: lightgreen;}
 .tab.done { fill: darkgreen;}
 .tab.error { fill: red; }
-
-/* ----- DOWNLOAD LIST ----- */
-#main-content .tab-body { padding: 2px; }
-#main-content button.md-fab { background: none; box-shadow: none; margin: 0px; }
-#main-content .number {
+.number {
   font-size: 6pt;
   background: #589DCD;
   border: 1px solid #60808D;
@@ -46,6 +33,15 @@ a:hover { cursor: pointer; }
   right: 12px;
   bottom: 16px;
 }
-#main-content .download { 
-  word-break: break-all;
-}
+
+md-list-item h3 { word-break: break-all; }
+md-list-item .md-avatar button.md-fab { background: none !important; box-shadow: none !important; margin: 0px !important; }
+md-list-item:not(:last-child) { padding-top: 16px; border-bottom: 1px solid #EAEEFF; }
+
+#top { position: fixed; width: 100%; z-index: 2; }
+
+#content { position: absolute; top: 64px; width: 100%; }
+md-tabs { height: 500px; }
+
+
+.md-dialog-container { height: 100% !important; }

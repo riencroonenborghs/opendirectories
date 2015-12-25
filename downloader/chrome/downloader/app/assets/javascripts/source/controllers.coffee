@@ -1,8 +1,6 @@
-app = angular.module "downloader.controllers", [
-  "downloader.constants"
-]
+app = angular.module "downloader.controllers", []
 
-app.controller "appController", ["$scope", "$rootScope", "$mdDialog", "$controller", "Server", "ICONS",
+app.controller "AppController", ["$scope", "$rootScope", "$mdDialog", "$controller", "Server", "ICONS",
 ($scope, $rootScope, $mdDialog, $controller, Server, ICONS) ->
   $scope.Server = Server
   
