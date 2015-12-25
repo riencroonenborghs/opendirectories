@@ -3,7 +3,7 @@
 
   "name": "Downloader",
   "description": "Downloader",
-  "version": "2.6",
+  "version": "2.8",
 
   "browser_action": {
     "default_icon": "app/assets/images/app.png",
