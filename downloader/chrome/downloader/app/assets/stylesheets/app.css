@@ -34,9 +34,10 @@ md-padding { padding: 16px; }
   bottom: 16px;
 }
 
-md-list-item h3 { word-break: break-all; }
+md-list-item { padding-top: 16px; padding-bottom: 16px; }
+md-list-item h3, md-list-item h4 { word-break: break-all; white-space: inherit !important;  }
 md-list-item .md-avatar button.md-fab { background: none !important; box-shadow: none !important; margin: 0px !important; }
-md-list-item:not(:last-child) { padding-top: 16px; border-bottom: 1px solid #EAEEFF; }
+md-list-item:not(:last-child) { border-bottom: 1px solid #EAEEFF; }
 
 #top { position: fixed; width: 100%; z-index: 2; }
 

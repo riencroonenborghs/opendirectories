@@ -3,7 +3,7 @@ class Api::V1::DownloadsController < ApplicationController
   
   def index
     render json: {
-      items:      current_user.downloads.latest.map(&:to_json), 
+      items:      current_user.downloads.map(&:to_json), 
       queued:     current_user.downloads.queued.count, 
       started:    current_user.downloads.started.count, 
       finished:   current_user.downloads.finished.count, 
