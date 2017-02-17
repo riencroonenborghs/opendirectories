@@ -1,0 +1,29 @@
+{
+  "name" : "downloader",
+  "version" : "0.4.0",
+  "description" : "A downloader for opendirectories",
+  "repository" : {
+    "type" : "git",
+    "url" : "git://github.com/riencroonenborghs/opendirectories.git"
+  },
+  "keywords" : ["chrome", "extension", "opendirectories", "Chrome extension"],
+  "readmeFilename" : "README.md",
+  "author" : "Rien Croonenborghs",
+  "license": "MIT",
+  "devDependencies" : {
+    "gulp" :  "3.9.0",
+    "gulp-coffee" : "2.3.1",
+    "gulp-util" : "3.0.7",
+    "del" : "2.2.0",
+    "angular": "1.5.9",
+    "angular-cookie": "4.1.0",
+    "angular-animate": "1.5.9",
+    "angular-aria": "1.5.9",
+    "angular-material": "1.1.1",
+    "angular-material-icons": "0.7.1",
+    "angular-sortable-view": "0.0.15",
+    "ng-token-auth": "0.0.29",
+    "jquery": "3.1.1",
+    "moment": "2.17.1"
+  }
+}

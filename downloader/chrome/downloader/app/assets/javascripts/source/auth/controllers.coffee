@@ -14,6 +14,7 @@ app.controller "SessionsController", ["$scope", "$rootScope", "Server", "$auth",
 
 app.controller "AuthController", [ "$scope", "$rootScope", "$mdDialog", "$auth", "$timeout",
 ($scope, $rootScope, $mdDialog, $auth, $timeout) ->
+
   $scope.user = null
   setUser = (user) ->
     $scope.user = user
@@ -30,6 +31,7 @@ app.controller "AuthController", [ "$scope", "$rootScope", "$mdDialog", "$auth",
       controller: "SessionsController"
       clickOutsideToClose: false
     $timeout (-> $(".authenticate #email").focus()), 500
+
   $scope.logOut = ->
     $auth.signOut().then ->
       $mdDialog.show

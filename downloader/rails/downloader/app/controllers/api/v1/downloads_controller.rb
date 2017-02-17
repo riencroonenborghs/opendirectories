@@ -1,5 +1,6 @@
 class Api::V1::DownloadsController < ApplicationController
   before_action :authenticate_user!
+  before_action :get_download, only: [:destroy, :cancel, :queue]
   
   def index
     render json: {
@@ -14,7 +15,11 @@ class Api::V1::DownloadsController < ApplicationController
   end
 
   def create
-    download = current_user.downloads.build(params.require(:download).permit(:url, :http_username, :http_password, :file_filter))      
+    download = current_user.downloads.build(
+      params.require(:download).permit(
+        :url, :http_username, :http_password, :file_filter, :weight
+      )
+    )      
     if download.save
       download.queue!
       render nothing: true, status: 200
@@ -24,8 +29,7 @@ class Api::V1::DownloadsController < ApplicationController
   end
 
   def destroy
-    download = current_user.downloads.where(id: params[:id]).first
-    if download &&  download.destroy
+    if @download &&  @download.destroy
       render nothing: true, status: 200
     else
       render nothing: true, status: 422
@@ -33,8 +37,7 @@ class Api::V1::DownloadsController < ApplicationController
   end
 
   def cancel
-    download = current_user.downloads.where(id: params[:id]).first
-    if download &&  download.cancelled!
+    if @download && @download.cancelled!
       render nothing: true, status: 200
     else
       render nothing: true, status: 422
@@ -42,8 +45,7 @@ class Api::V1::DownloadsController < ApplicationController
   end
 
   def queue
-    download = current_user.downloads.where(id: params[:id]).first
-    if download &&  download.queue!
+    if @download && @download.queue!
       render nothing: true, status: 200
     else
       render nothing: true, status: 422
@@ -53,5 +55,18 @@ class Api::V1::DownloadsController < ApplicationController
   def clear
     current_user.downloads.for_clearing.map(&:destroy)
     render nothing: true, status: 200
+  end
+
+  def reorder
+    current_user.downloads.where(id: params[:data].keys).each do |download|
+      download.update_attributes!(weight: params[:data][download.id.to_s])
+    end
+    render nothing: true, status: 200
+  end
+
+private
+
+  def get_download
+    @download = current_user.downloads.where(id: params[:id]).first
   end
 end

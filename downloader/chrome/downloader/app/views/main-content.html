@@ -1,5 +1,5 @@
 <md-content class="content" id="content">
-  <md-tabs md-selected="selectedIndex" md-border-bottom md-primary>
+  <md-tabs md-selected="selectedIndex" md-border-bottom  md-dynamic-height md-primary>
     <md-tab ng-repeat="tab in tabs">
       <md-tab-label>
         <ng-md-icon icon="{{tab.icon}}" class="tab {{tab.title}}"></ng-md-icon>
@@ -7,13 +7,25 @@
       </md-tab-label>
       <md-tab-body>
 
-        <md-list class="md-padding">
-          <md-list-item ng-repeat="download in downloads.items | filter: {status: tab.title}" class="md-3-line">
+        <md-list class="md-padding" sv-root sv-part="downloads.items" sv-on-sort="reorderDownloads()">
+          <md-list-item ng-repeat="download in downloads.items | filter: {status: tab.title}" sv-element class="md-3-line">
+            <div sv-placeholder class="drop">
+              Drop download here
+            </div>
+
             <div class="md-avatar" layout="column">
-              <md-button class="md-fab md-mini" ng-if="download.canCancel" title="cancel" ng-click="cancelDownload(download)" aria-label="Cancel download"><ng-md-icon icon="cancel" style="fill: orange;"></ng-md-icon></md-button>
-              <md-button class="md-fab md-mini" ng-if="download.canQueue" title="queue" ng-click="queueDownload(download)" aria-label="Queue download"><ng-md-icon icon="queue" style="fill: green;"></ng-md-icon></md-button>
-              <!-- <span flex></span> -->
-              <md-button class="md-fab md-mini" ng-if="download.canDelete" title="delete" ng-click="deleteDownload(download)" aria-label="Delete download"><ng-md-icon icon="delete" style="fill: red;"></ng-md-icon></md-button>
+              <span class="drag-handle" sv-handle ng-if="selectedIndex == 0">
+                <ng-md-icon icon="drag_handle"></ng-md-icon>
+              </span>
+              <md-button class="md-icon-button md-primary md-warn" aria-label="Cancel download" title="Cancel download" ng-if="download.canCancel" ng-click="cancelDownload(download)">
+                <ng-md-icon icon="cancel">
+              </md-button>
+              <md-button class="md-icon-button md-primary" aria-label="Queue download" title="Queue download" ng-if="download.canQueue" ng-click="queueDownload(download)">
+                <ng-md-icon icon="queue">
+              </md-button>
+              <md-button class="md-icon-button md-primary md-warn" aria-label="Delete download" title="Delete download" ng-if="download.canDelete" ng-click="deleteDownload(download)">
+                <ng-md-icon icon="delete">
+              </md-button>
             </div>
 
             <div class="md-list-item-text">

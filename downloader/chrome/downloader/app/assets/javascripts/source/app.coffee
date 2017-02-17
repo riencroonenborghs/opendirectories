@@ -4,6 +4,7 @@ app = angular.module "downloader", [
   "ngAnimate", 
   "ngMaterial", 
   "ngMdIcons",
+  "angular-sortable-view",
   "downloader.constants",
   "downloader.controllers",
   "downloader.server.factories",
@@ -15,3 +16,7 @@ app.config ($authProvider, SERVER, PORT) ->
   $authProvider.configure
     apiUrl: "http://#{SERVER}:#{PORT}"
 
+app.config ($mdThemingProvider) ->
+  $mdThemingProvider.theme("default")
+    .primaryPalette("blue")
+    .accentPalette("light-blue")

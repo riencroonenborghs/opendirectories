@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150911220035) do
+ActiveRecord::Schema.define(version: 20170218095701) do
 
   create_table "downloads", force: :cascade do |t|
     t.integer  "user_id"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20150911220035) do
     t.datetime "updated_at",                        null: false
     t.datetime "cancelled_at"
     t.string   "file_filter"
+    t.integer  "weight",        default: 9999,      null: false
   end
 
   add_index "downloads", ["user_id"], name: "index_downloads_on_user_id"

@@ -70,5 +70,22 @@ app.factory "Server", [ "SERVER", "PORT", "ICONS", "$http", "$q", (SERVER, PORT,
         url: @build("/api/v1/downloads/clear")
         dataType: "jsonp"
       .success () -> deferred.resolve()
-      deferred.promise     
+      deferred.promise    
+    reorder: (downloads) ->
+      deferred = $q.defer()
+      data = {data: {}}
+      for download in downloads
+        data.data[download.id] = download.weight
+
+      $http
+        method: "POST"
+        url: @build("/api/v1/downloads/reorder")
+        data: data
+      .then () ->
+        deferred.resolve()
+        return
+      , (message) ->      
+        deferred.reject(message.data.error)
+        return
+      deferred.promise
 ]

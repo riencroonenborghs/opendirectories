@@ -15,7 +15,12 @@ app.controller "NewDownloadController", ["$scope", "$rootScope", "$mdDialog", "$
   $scope.close = -> $mdDialog.hide()
 ]
 
-app.controller "DownloadsController", [ "$scope", "$rootScope", "$mdDialog", "Server", ($scope, $rootScope, $mdDialog, Server) ->
+app.controller "DownloadsController", [ "$scope", "$rootScope", "$mdDialog", "Server", "$mdToast",
+($scope, $rootScope, $mdDialog, Server, $mdToast) ->
+
+  showToast = (message) ->
+    $mdToast.show($mdToast.simple().textContent(message).hideDelay(3000))
+
   $scope.downloads = []
   $rootScope.$on "downloads.get", () ->
     $scope.getDownloads()
@@ -30,7 +35,9 @@ app.controller "DownloadsController", [ "$scope", "$rootScope", "$mdDialog", "Se
       controller: "NewDownloadController"
       clickOutsideToClose: false
     .then ->
+      showToast "Download added."
       $scope.getDownloads()
+      
   $scope.deleteDownload = (download, $event) ->
     confirm = $mdDialog.confirm()
       .title("Delete Download")
@@ -38,8 +45,27 @@ app.controller "DownloadsController", [ "$scope", "$rootScope", "$mdDialog", "Se
       .ok("BE GONE WITH IT!")
       .cancel("No")
       .targetEvent($event)
-    $mdDialog.show(confirm).then (() -> Server.service.delete(download).then () -> $scope.getDownloads())  
-  $scope.cancelDownload = (download) -> Server.service.cancel(download).then () -> $scope.getDownloads()
-  $scope.queueDownload = (download) -> Server.service.queue(download).then () -> $scope.getDownloads()
-  $scope.clearDownloads = -> Server.service.clear().then -> $scope.getDownloads()
+    $mdDialog.show(confirm).then (() -> 
+      Server.service.delete(download).then () -> 
+        showToast "Download deleted."
+        $scope.getDownloads())  
+  $scope.cancelDownload = (download) -> 
+    Server.service.cancel(download).then () -> 
+      showToast "Download cancelled."
+      $scope.getDownloads()
+  $scope.queueDownload = (download) -> 
+    Server.service.queue(download).then () -> 
+      showToast "Download queued."
+      $scope.getDownloads()
+  $scope.clearDownloads = -> 
+    Server.service.clear().then -> 
+      showToast "All queues cleared."
+      $scope.getDownloads()
+
+  $scope.reorderDownloads = ->
+    for download, index in $scope.downloads.items
+      download.weight = index
+    Server.service.reorder($scope.downloads.items).then ()->
+      showToast "Queues updated."
+      $scope.getDownloads()
 ]

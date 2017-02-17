@@ -12,6 +12,7 @@ Rails.application.routes.draw do
         end
         collection do
           post :clear
+          post :reorder
         end
       end
     end

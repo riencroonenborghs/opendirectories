@@ -1,11 +1,11 @@
-body { min-width: 500px; }
+html, body { min-width: 800px; min-height: 600px; }
 
-md-padding { padding: 16px; }
-.pointer { cursor: pointer; }
+.new-download { min-width: 80%; }
+.authenticate { min-width: 80%; }
 .error { color: red; }
 
 .initials {
-  background-color: #1689C3;
+  background-color: #C31670;
   border-radius: 5px;
   padding: 7px;
   font-size: 9pt;
@@ -13,36 +13,6 @@ md-padding { padding: 16px; }
   font-weight: bold;
 }
 
+.drop { border: 2px dashed lightblue; color: lightblue; padding: 4px; font-size: 125%; }
 
-.tab.initial { fill: rgb(190, 190, 21);}
-.tab.queued { fill: orange;}
-.tab.busy { fill: lightgreen;}
-.tab.done { fill: darkgreen;}
-.tab.error { fill: red; }
-.number {
-  font-size: 6pt;
-  background: #589DCD;
-  border: 1px solid #60808D;
-  color: white;
-  border-radius: 50%;
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  position: relative;
-  right: 12px;
-  bottom: 16px;
-}
-
-md-list-item { padding-top: 16px; padding-bottom: 16px; }
-md-list-item h3, md-list-item h4 { word-break: break-all; white-space: inherit !important;  }
-md-list-item .md-avatar button.md-fab { background: none !important; box-shadow: none !important; margin: 0px !important; }
-md-list-item:not(:last-child) { border-bottom: 1px solid #EAEEFF; }
-
-#top { position: fixed; width: 100%; z-index: 2; }
-
-#content { position: absolute; top: 64px; width: 100%; }
-md-tabs { height: 500px; }
-
-
-.md-dialog-container { height: 100% !important; }
+.drag-handle { cursor: move; }
