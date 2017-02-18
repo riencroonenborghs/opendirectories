@@ -61,6 +61,32 @@ class Download < ActiveRecord::Base
     update(job_id: job_id, weight: user.downloads.queued.count)
     queue!
   end
+  def front_enqueue!
+    return if queued? || started?
+
+    # remove all from resque
+    user.downloads.queued.map(&:remove_from_resque!)
+
+    # update weights: self is 0, rest is index + 1
+    update_attributes!(weight: 0)
+    user.downloads.queued.each_with_index do |download, index|
+      if download.id != self.id
+        download.update_attributes!(weight: index + 1)
+      end
+    end
+
+    # enqueue myself, then the other ones
+    job_id = DownloadJob.create id: self.id
+    update(job_id: job_id)
+    queue!
+    user.downloads.queued do |download, index|
+      if download.id != self.id
+        job_id = DownloadJob.create id: self.id
+        update(job_id: job_id)
+        queue!
+      end
+    end
+  end
 
   def queue!
     update(status: STATUS_QUEUED, queued_at: Time.zone.now, started_at: nil, finished_at: nil, error: nil)

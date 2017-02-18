@@ -36,6 +36,20 @@ app.factory "Server", [ "SERVER", "PORT", "ICONS", "$http", "$q", (SERVER, PORT,
         deferred.reject(message.data.error)
         return
       deferred.promise
+    createInFront: (model) ->
+      deferred = $q.defer()
+      data = {download: model, front: true}
+      $http
+        method: "POST"
+        url: @build("/api/v1/downloads.json")
+        data: data
+      .then () ->
+        deferred.resolve()
+        return
+      , (message) ->      
+        deferred.reject(message.data.error)
+        return
+      deferred.promise
     delete: (download) ->
       return unless download.canDelete
       deferred = $q.defer()

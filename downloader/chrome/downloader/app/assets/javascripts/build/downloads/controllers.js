@@ -43,11 +43,11 @@ app.controller("DownloadsController", [
       return Server.service.get("/api/v1/downloads.json").then(function(data) {
         var download, i, len, ref, results;
         $scope.downloads = data;
-        ref = $scope.downloads;
+        ref = $scope.downloads.items;
         results = [];
         for (i = 0, len = ref.length; i < len; i++) {
           download = ref[i];
-          results.push(download.visible = true);
+          results.push(download.visible = false);
         }
         return results;
       });

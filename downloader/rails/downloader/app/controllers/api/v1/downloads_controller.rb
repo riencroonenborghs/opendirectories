@@ -4,12 +4,6 @@ class Api::V1::DownloadsController < ApplicationController
   
   def index
     scope = current_user.downloads
-    pp "status=-----------"
-    scope.each do |dl|
-      status = Resque::Plugins::Status::Hash.get(dl.job_id)
-      pp status
-    end
-
     render json: {
       items:      scope.map(&:to_json), 
       queued:     scope.queued.count, 
@@ -24,11 +18,12 @@ class Api::V1::DownloadsController < ApplicationController
   def create
     download = current_user.downloads.build(
       params.require(:download).permit(
-        :url, :http_username, :http_password, :file_filter, :weight
+        :url, :http_username, :http_password, :file_filter
       )
-    )      
+    )
+
     if download.save
-      download.enqueue!
+      params[:front] ? download.front_enqueue! : download.enqueue!
       render nothing: true, status: 200
     else
       render json: {error: download.errors.full_messages.join(", ")}, status: 422
