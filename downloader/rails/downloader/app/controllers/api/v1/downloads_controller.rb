@@ -3,14 +3,21 @@ class Api::V1::DownloadsController < ApplicationController
   before_action :get_download, only: [:destroy, :cancel, :queue]
   
   def index
+    scope = current_user.downloads
+    pp "status=-----------"
+    scope.each do |dl|
+      status = Resque::Plugins::Status::Hash.get(dl.job_id)
+      pp status
+    end
+
     render json: {
-      items:      current_user.downloads.map(&:to_json), 
-      queued:     current_user.downloads.queued.count, 
-      started:    current_user.downloads.started.count, 
-      finished:   current_user.downloads.finished.count, 
-      error:      current_user.downloads.error.count, 
-      cancelled:  current_user.downloads.cancelled.count, 
-      total:      current_user.downloads.count
+      items:      scope.map(&:to_json), 
+      queued:     scope.queued.count, 
+      started:    scope.started.count, 
+      finished:   scope.finished.count, 
+      error:      scope.error.count, 
+      cancelled:  scope.cancelled.count, 
+      total:      scope.count
     }
   end
 
@@ -21,7 +28,7 @@ class Api::V1::DownloadsController < ApplicationController
       )
     )      
     if download.save
-      download.queue!
+      download.enqueue!
       render nothing: true, status: 200
     else
       render json: {error: download.errors.full_messages.join(", ")}, status: 422
@@ -37,7 +44,7 @@ class Api::V1::DownloadsController < ApplicationController
   end
 
   def cancel
-    if @download && @download.cancelled!
+    if @download && @download.cancel!
       render nothing: true, status: 200
     else
       render nothing: true, status: 422
@@ -45,7 +52,7 @@ class Api::V1::DownloadsController < ApplicationController
   end
 
   def queue
-    if @download && @download.queue!
+    if @download && @download.enqueue!
       render nothing: true, status: 200
     else
       render nothing: true, status: 422
@@ -58,9 +65,15 @@ class Api::V1::DownloadsController < ApplicationController
   end
 
   def reorder
-    current_user.downloads.where(id: params[:data].keys).each do |download|
+    # set new order
+    current_user.downloads.where(id: params[:data].keys).queued.each do |download|
       download.update_attributes!(weight: params[:data][download.id.to_s])
     end
+    # get new ordered list and remove from queue and enqueue
+    scope = current_user.downloads.where(id: params[:data].keys).queued
+    scope.map(&:remove_from_resque!)
+    scope.map(&:enqueue!)
+
     render nothing: true, status: 200
   end
 

@@ -1,9 +1,11 @@
 class DownloadJob
+  include Resque::Plugins::Status
+
   @queue = :downloader
 
-  def self.perform(id)
-    download = Download.find_by_id(id)
-    raise StandardError.new "Cannot find download with ID #{id}" unless download
+  def perform
+    download = Download.find_by_id options["id"]
+    raise StandardError.new "Cannot find download with ID #{options["id"]}" unless download
     download.run!
   end
 end

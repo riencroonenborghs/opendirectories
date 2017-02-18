@@ -28,18 +28,12 @@ class Download < ActiveRecord::Base
     [initial.last_n(5), queued.last_n(5), started.last_n(5), finished.last_n(5), error.last_n(5)].compact.flatten
   end
 
-  def queue!    
-    return if queued? || started?
-    Resque.enqueue(DownloadJob, id)
-    queued!
-  end
-
   def run!    
     prep_output_path!
 
     begin
       return if cancelled?
-      started!
+      start!
       if Rails.env.development?
         puts "-------------------------------"
         puts "download_type: #{download_type}"
@@ -49,35 +43,63 @@ class Download < ActiveRecord::Base
       else
         system(download_command) if download_command
       end
-      finished!
+      finish!
     rescue => e
       error!(e.message)
     end    
   end
 
-  def queued!
+  def destroy
+    remove_from_resque!
+    update(weight: 9999)
+    super
+  end
+
+  def enqueue!    
+    return if queued? || started?
+    job_id = DownloadJob.create id: self.id
+    update(job_id: job_id, weight: user.downloads.queued.count)
+    queue!
+  end
+
+  def queue!
     update(status: STATUS_QUEUED, queued_at: Time.zone.now, started_at: nil, finished_at: nil, error: nil)
   end
+
   def queued?
     status == STATUS_QUEUED
   end
-  def started!    
+
+
+  def start!    
     update(status: STATUS_STARTED, started_at: Time.zone.now, finished_at: nil, error: nil)
   end
+
   def started?
     status == STATUS_STARTED
   end
-  def finished!
+
+
+  def finish!
     update(status: STATUS_FINISHED, finished_at: Time.zone.now)
   end
+
   def error!(message)
     update(status: STATUS_ERROR, finished_at: Time.zone.now, error: message)
   end
-  def cancelled!
-    update(status: STATUS_CANCELLED, cancelled_at: Time.zone.now)
+
+
+  def cancel!
+    remove_from_resque!
+    update(status: STATUS_CANCELLED, cancelled_at: Time.zone.now, weight: 9999)
   end
+
   def cancelled?
     status == STATUS_CANCELLED
+  end
+
+  def remove_from_resque!
+    Resque::Plugins::Status::Hash.kill(self.job_id)
   end
 
   def to_json
