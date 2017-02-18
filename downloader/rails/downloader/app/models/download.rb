@@ -92,6 +92,9 @@ class Download < ActiveRecord::Base
   def cancel!
     remove_from_resque!
     update(status: STATUS_CANCELLED, cancelled_at: Time.zone.now, weight: 9999)
+    user.downloads.queued.each_with_index do |download, index|
+      download.update_attributes!(weight: index)
+    end
   end
 
   def cancelled?

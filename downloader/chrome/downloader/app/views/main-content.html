@@ -29,7 +29,7 @@
             </div>
 
             <div class="md-list-item-text">
-              <h3 class="pointer" ng-click="download.visible = !download.visible">{{download.url}}</h3>
+              <h3 ng-class="{pointer: selectedIndex != 0}" ng-click="download.visible = !download.visible">{{download.url}}</h3>
               <h4>Added by {{download.user.email}} on {{download.created_at | date: "EEEE, dd MMMM, hh:mma"}}</h4>
               <p>
                 <div ng-if="download.visible && download.started_at">

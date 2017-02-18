@@ -3,6 +3,7 @@ html, body { min-width: 800px; min-height: 600px; }
 .new-download { min-width: 80%; }
 .authenticate { min-width: 80%; }
 .error { color: red; }
+.pointer { cursor: pointer; }
 
 .initials {
   background-color: #C31670;

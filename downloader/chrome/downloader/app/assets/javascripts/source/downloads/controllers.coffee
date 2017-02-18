@@ -28,6 +28,8 @@ app.controller "DownloadsController", [ "$scope", "$rootScope", "$mdDialog", "Se
   $scope.getDownloads = ->
     Server.service.get("/api/v1/downloads.json").then (data) ->
       $scope.downloads = data
+      for download in $scope.downloads.items
+        download.visible = false
   
   $scope.newDownload = ($event) ->
     $mdDialog.show

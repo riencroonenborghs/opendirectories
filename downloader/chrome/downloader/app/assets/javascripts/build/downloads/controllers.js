@@ -41,7 +41,15 @@ app.controller("DownloadsController", [
     });
     $scope.getDownloads = function() {
       return Server.service.get("/api/v1/downloads.json").then(function(data) {
-        return $scope.downloads = data;
+        var download, i, len, ref, results;
+        $scope.downloads = data;
+        ref = $scope.downloads;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          download = ref[i];
+          results.push(download.visible = true);
+        }
+        return results;
       });
     };
     $scope.newDownload = function($event) {
