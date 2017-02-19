@@ -18,18 +18,24 @@ app.controller "NewDownloadController", ["$scope", "$rootScope", "$mdDialog", "$
 app.controller "DownloadsController", [ "$scope", "$rootScope", "$mdDialog", "Server", "$mdToast",
 ($scope, $rootScope, $mdDialog, Server, $mdToast) ->
 
+  $scope.statuses = ["initial", "queued", "started", "finished", "error", "cancelled"]
+  $scope.tabStatuses = ["queued", "started", "finished", "error", "cancelled"]
+
   showToast = (message) ->
     $mdToast.show($mdToast.simple().textContent(message).hideDelay(3000))
 
-  $scope.downloads = []
+  $scope.downloads = {}
   $rootScope.$on "downloads.get", () ->
     $scope.getDownloads()
 
   $scope.getDownloads = ->
+    $scope.downloads = {}
     Server.service.get("/api/v1/downloads.json").then (data) ->
-      $scope.downloads = data
-      for download in $scope.downloads.items
-        download.visible = false
+      for download in data
+        for status in $scope.statuses
+          $scope.downloads[status] ||= []
+          $scope.downloads[status].push download if download.status == status
+      console.debug $scope.downloads
   
   $scope.newDownload = ($event) ->
     $mdDialog.show
@@ -65,9 +71,11 @@ app.controller "DownloadsController", [ "$scope", "$rootScope", "$mdDialog", "Se
       $scope.getDownloads()
 
   $scope.reorderDownloads = ->
-    for download, index in $scope.downloads.items
+    return unless $scope.selectedIndex == 0
+    data = for download, index in $scope.downloads.queued
       download.weight = index
-    Server.service.reorder($scope.downloads.items).then ()->
+      download
+    Server.service.reorder(data).then ()->
       showToast "Queues updated."
       $scope.getDownloads()
 ]

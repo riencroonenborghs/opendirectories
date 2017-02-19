@@ -1,4 +1,4 @@
-html, body { min-width: 800px; min-height: 600px; }
+html, body { min-width: 800px; }
 
 .new-download { min-width: 80%; }
 .authenticate { min-width: 80%; }

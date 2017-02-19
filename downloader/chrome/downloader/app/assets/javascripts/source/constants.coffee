@@ -9,5 +9,5 @@ app.constant "ICONS",
   cancelled: "cloud_off"
 
 
-app.constant "SERVER", "localhost"
-app.constant "PORT", 3000
+app.constant "SERVER", "mother"
+app.constant "PORT", 80

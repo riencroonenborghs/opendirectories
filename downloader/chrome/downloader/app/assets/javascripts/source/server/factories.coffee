@@ -12,13 +12,13 @@ app.factory "Server", [ "SERVER", "PORT", "ICONS", "$http", "$q", (SERVER, PORT,
         url: @build("/api/v1/downloads.json")
         dataType: "jsonp"
       .success (data) -> 
-        data.items = for item in data.items
-          item.visible = false
-          item.icon = ICONS[item.status]
+        data = for item in data
+          item.visible    = false
+          item.icon       = ICONS[item.status]
           item.hasPointer = (item.status != "initial" && item.status != "queued")
-          item.canDelete = (item.status != "started" && item.status != "queued")
-          item.canCancel = (item.status == "queued")
-          item.canQueue = (item.status == "initial" || item.status == "finished" || item.status == "error" || item.status == "cancelled")
+          item.canDelete  = (item.status != "started" && item.status != "queued")
+          item.canCancel  = (item.status == "queued")
+          item.canQueue   = (item.status == "initial" || item.status == "finished" || item.status == "error" || item.status == "cancelled")
           item
         deferred.resolve data
       deferred.promise

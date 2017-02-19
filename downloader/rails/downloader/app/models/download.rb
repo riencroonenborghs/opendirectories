@@ -61,6 +61,7 @@ class Download < ActiveRecord::Base
     update(job_id: job_id, weight: user.downloads.queued.count)
     queue!
   end
+  
   def front_enqueue!
     return if queued? || started?
 

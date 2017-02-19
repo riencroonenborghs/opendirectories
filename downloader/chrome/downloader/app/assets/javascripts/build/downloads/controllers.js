@@ -32,24 +32,31 @@ app.controller("NewDownloadController", [
 app.controller("DownloadsController", [
   "$scope", "$rootScope", "$mdDialog", "Server", "$mdToast", function($scope, $rootScope, $mdDialog, Server, $mdToast) {
     var showToast;
+    $scope.statuses = ["initial", "queued", "started", "finished", "error", "cancelled"];
+    $scope.tabStatuses = ["queued", "started", "finished", "error", "cancelled"];
     showToast = function(message) {
       return $mdToast.show($mdToast.simple().textContent(message).hideDelay(3000));
     };
-    $scope.downloads = [];
+    $scope.downloads = {};
     $rootScope.$on("downloads.get", function() {
       return $scope.getDownloads();
     });
     $scope.getDownloads = function() {
+      $scope.downloads = {};
       return Server.service.get("/api/v1/downloads.json").then(function(data) {
-        var download, i, len, ref, results;
-        $scope.downloads = data;
-        ref = $scope.downloads.items;
-        results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          download = ref[i];
-          results.push(download.visible = false);
+        var base, download, i, j, len, len1, ref, status;
+        for (i = 0, len = data.length; i < len; i++) {
+          download = data[i];
+          ref = $scope.statuses;
+          for (j = 0, len1 = ref.length; j < len1; j++) {
+            status = ref[j];
+            (base = $scope.downloads)[status] || (base[status] = []);
+            if (download.status === status) {
+              $scope.downloads[status].push(download);
+            }
+          }
         }
-        return results;
+        return console.debug($scope.downloads);
       });
     };
     $scope.newDownload = function($event) {
@@ -91,13 +98,22 @@ app.controller("DownloadsController", [
       });
     };
     return $scope.reorderDownloads = function() {
-      var download, i, index, len, ref;
-      ref = $scope.downloads.items;
-      for (index = i = 0, len = ref.length; i < len; index = ++i) {
-        download = ref[index];
-        download.weight = index;
+      var data, download, index;
+      if ($scope.selectedIndex !== 0) {
+        return;
       }
-      return Server.service.reorder($scope.downloads.items).then(function() {
+      data = (function() {
+        var i, len, ref, results;
+        ref = $scope.downloads.queued;
+        results = [];
+        for (index = i = 0, len = ref.length; i < len; index = ++i) {
+          download = ref[index];
+          download.weight = index;
+          results.push(download);
+        }
+        return results;
+      })();
+      return Server.service.reorder(data).then(function() {
         showToast("Queues updated.");
         return $scope.getDownloads();
       });

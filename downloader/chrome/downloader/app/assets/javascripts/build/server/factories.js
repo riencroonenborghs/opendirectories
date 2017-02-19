@@ -21,12 +21,11 @@ app.factory("Server", [
             dataType: "jsonp"
           }).success(function(data) {
             var item;
-            data.items = (function() {
-              var i, len, ref, results;
-              ref = data.items;
+            data = (function() {
+              var i, len, results;
               results = [];
-              for (i = 0, len = ref.length; i < len; i++) {
-                item = ref[i];
+              for (i = 0, len = data.length; i < len; i++) {
+                item = data[i];
                 item.visible = false;
                 item.icon = ICONS[item.status];
                 item.hasPointer = item.status !== "initial" && item.status !== "queued";
