@@ -1,4 +1,4 @@
-html, body { min-width: 800px; }
+html, body { min-width: 800px; min-height: 550px; }
 
 .new-download { min-width: 80%; }
 .authenticate { min-width: 80%; }
@@ -17,3 +17,7 @@ html, body { min-width: 800px; }
 .drop { border: 2px dashed lightblue; color: lightblue; padding: 4px; font-size: 125%; }
 
 .drag-handle { cursor: move; }
+
+
+.content { height: calc(100% - 48px); }
+.content md-tabs { height: 100%; }
