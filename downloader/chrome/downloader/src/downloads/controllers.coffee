@@ -24,13 +24,14 @@ app.controller "DownloadsController", [ "$scope", "$rootScope", "$mdDialog", "Se
   showToast = (message) ->
     $mdToast.show($mdToast.simple().textContent(message).hideDelay(3000))
 
-  $scope.downloads = {}
+  $scope.downloads = false
   $rootScope.$on "downloads.get", () ->
     $scope.getDownloads()
 
   $scope.getDownloads = ->
-    $scope.downloads = {}
+    $scope.downloads = false
     Server.service.get("/api/v1/downloads.json").then (data) ->
+      $scope.downloads = {}
       for download in data
         for status in $scope.statuses
           $scope.downloads[status] ||= []

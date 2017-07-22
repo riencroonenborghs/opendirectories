@@ -37,14 +37,15 @@ app.controller("DownloadsController", [
     showToast = function(message) {
       return $mdToast.show($mdToast.simple().textContent(message).hideDelay(3000));
     };
-    $scope.downloads = {};
+    $scope.downloads = false;
     $rootScope.$on("downloads.get", function() {
       return $scope.getDownloads();
     });
     $scope.getDownloads = function() {
-      $scope.downloads = {};
+      $scope.downloads = false;
       return Server.service.get("/api/v1/downloads.json").then(function(data) {
         var download, i, len, results, status;
+        $scope.downloads = {};
         results = [];
         for (i = 0, len = data.length; i < len; i++) {
           download = data[i];
