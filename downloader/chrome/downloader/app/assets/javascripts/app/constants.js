@@ -10,6 +10,6 @@ app.constant("ICONS", {
   cancelled: "cloud_off"
 });
 
-app.constant("SERVER", "localhost");
+app.constant("SERVER", "mother");
 
-app.constant("PORT", 3000);
+app.constant("PORT", 80);
