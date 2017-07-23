@@ -3,23 +3,14 @@ class Api::V1::DownloadsController < ApplicationController
   before_action :get_download, only: [:destroy, :cancel, :queue]
   
   def index
-    scope = current_user.downloads
+    scope = current_user.downloads.order(created_at: :desc)
     render json: scope.map(&:to_json)
-    # render json: {
-    #   items:      scope.map(&:to_json), 
-    #   queued:     scope.queued.count, 
-    #   started:    scope.started.count, 
-    #   finished:   scope.finished.count, 
-    #   error:      scope.error.count, 
-    #   cancelled:  scope.cancelled.count, 
-    #   total:      scope.count
-    # }
   end
 
   def create
     download = current_user.downloads.build(
       params.require(:download).permit(
-        :url, :http_username, :http_password, :file_filter
+        :url, :http_username, :http_password, :file_filter, :audio_only, :audio_format
       )
     )
 
@@ -62,16 +53,12 @@ class Api::V1::DownloadsController < ApplicationController
 
   def reorder
     # set new order
-    pp "---------- params[:data]"
-    pp params[:data]
     current_user.downloads.where(id: params[:data].keys).queued.each do |download|
       download.update_attributes!(weight: params[:data][download.id.to_s])
-      pp "------------ id: #{download.id} url: #{download.url} weight: #{download.weight}"
     end
 
     # get new ordered list and remove from queue and enqueue
     scope = current_user.downloads.where(id: params[:data].keys).queued
-    pp "----------  scope #{scope.map(&:url)}"
     scope.map(&:remove_from_resque!)
     scope.map(&:enqueue!)
 

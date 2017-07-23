@@ -8,10 +8,17 @@ app.controller("NewDownloadController", [
       url: "",
       http_username: "",
       http_password: "",
-      file_filter: ""
+      file_filter: "",
+      audio_only: false,
+      audio_format: "mp3"
     };
     $scope.forms = {};
     $scope.error = null;
+    $scope.resetAndCheck = function() {
+      $scope.error = null;
+      return $scope.isYoutube = $scope.model.url.match(/youtu/) !== null;
+    };
+    $scope.audioFormats = ["best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", "wav"];
     $scope.save = function() {
       var failure, success;
       success = function() {

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170218095702) do
+ActiveRecord::Schema.define(version: 20170723010036) do
 
   create_table "downloads", force: :cascade do |t|
     t.integer  "user_id"
@@ -29,6 +29,8 @@ ActiveRecord::Schema.define(version: 20170218095702) do
     t.string   "file_filter"
     t.integer  "weight",        default: 9999,      null: false
     t.text     "job_id"
+    t.boolean  "audio_only",    default: false,     null: false
+    t.string   "audio_format",  default: "mp3",     null: false
   end
 
   add_index "downloads", ["user_id"], name: "index_downloads_on_user_id"

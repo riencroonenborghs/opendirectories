@@ -20,13 +20,11 @@
 
   <div class="md-list-item-text">
     <h3 ng-class="{pointer: selectedIndex != 0}" ng-click="download.visible = !download.visible">{{download.url}}</h3>
-    <h4>Added by {{download.user.email}} on {{download.created_at | date: "EEEE, dd MMMM, hh:mma"}}</h4>
+    <h4>Added by {{download.user.email}} on {{download.created_at | date: "EEEE, dd MMMM, hh:mm a"}}</h4>
     <p>
-      <div ng-if="download.visible && download.started_at">
-        Started at: {{ download.started_at | date : "EEEE, dd MMMM, hh:mma"}}
-      </div>
-      <div ng-if="download.visible && download.finished_at">
-        Finished at: {{ download.finished_at | date : "EEEE, dd MMMM, hh:mma"}}
+      <div ng-if="download.visible && (download.started_at || download.finished_at)">
+        Started: {{ download.started_at | date : "EEEE, dd MMMM, hh:mm a"}}
+        Finished: {{ download.finished_at | date : "EEEE, dd MMMM, hh:mm a"}}
       </div>
       <div ng-if="download.visible && download.error" class="error">
         <h2>Error</h2>

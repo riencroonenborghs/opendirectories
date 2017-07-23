@@ -12,6 +12,7 @@ class Download < ActiveRecord::Base
   validates_presence_of :url
   validates_format_of :url, with: URI::regexp(%w(http https ftp))
   validates_inclusion_of :status, in: VALID_STATUSES
+  validates_inclusion_of :audio_format, in: ["best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", "wav"]
   validate :http_credentials
 
   scope :last_n,    lambda { |n| order(id: :desc).limit(n) }
@@ -162,8 +163,6 @@ private
     @download_type ||= begin
       if url =~ /youtube\.com/
         :youtube 
-      elsif url =~ /mega\.nz|mega\.co\.nz/
-        :mega
       elsif url =~ /iplayer/
         :bbc_iplayer
       else 
@@ -177,9 +176,6 @@ private
       case download_type
       when :youtube
         youtube_dl_command
-      when :mega
-        # TODO
-        nil
       when :bbc_iplayer
         iplayer_command
       when :opendir_dl
@@ -191,12 +187,10 @@ private
   def youtube_dl_command
     program = "youtube-dl"
     cmd = [program]
+    cmd << "--extract-audio --audio-format \"#{audio_format}\" --audio-quality 0" if audio_only
     cmd << "--continue --output \"#{ENV["OUTPUT_PATH"]}/%(title)s-%(id)s.%(ext)s\""
     cmd << "\"#{url}\" "
     cmd.join(" ")
-  end
-
-  def mega_nz_command
   end
 
   def opendir_dl_command

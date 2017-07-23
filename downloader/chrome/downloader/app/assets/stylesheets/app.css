@@ -1,6 +1,10 @@
 html, body { min-width: 800px; min-height: 550px; }
 
-.new-download { min-width: 80%; }
+.new-download { min-width: 60%; }
+.new-download md-input-container,
+.new-download md-switch,
+.new-download md-select { padding: 0px; margin: 0px; }
+.new-download .is-youtube { margin-bottom: 16px; }
 .authenticate { min-width: 80%; }
 .error { color: red; }
 .pointer { cursor: pointer; }

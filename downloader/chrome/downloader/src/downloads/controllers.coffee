@@ -2,9 +2,19 @@ app = angular.module "downloader.downloads.controllers", []
 
 app.controller "NewDownloadController", ["$scope", "$rootScope", "$mdDialog", "Server",
 ($scope, $rootScope, $mdDialog, Server) ->
-  $scope.model = {url: "", http_username: "", http_password: "", file_filter: ""}
+  $scope.model = 
+    url: ""
+    http_username: ""
+    http_password: ""
+    file_filter: ""
+    audio_only: false
+    audio_format: "mp3"
   $scope.forms = {}
   $scope.error = null
+  $scope.resetAndCheck = ->
+    $scope.error = null
+    $scope.isYoutube = $scope.model.url.match(/youtu/) != null
+  $scope.audioFormats = ["best", "aac", "flac", "mp3", "m4a", "opus", "vorbis", "wav"]
   $scope.save = () ->
     success = ->
       $rootScope.$broadcast "downloads.get"
