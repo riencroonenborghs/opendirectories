@@ -17,12 +17,8 @@
   </md-list>
 </md-content>
 
-<md-content>
-  <md-fab-speed-dial md-open="false" md-direction="up" ng-class="md-fling">
-    <md-fab-trigger>
-      <md-button aria-label="Add Blacklist" class="md-fab md-primary" ng-click="visit('/settings/blacklist/new')">
-        <ng-md-icon icon="add" size="14" style="fill: white;"></ng-md-icon>
-      </md-button>
-    </md-fab-trigger>
-  </md-fab-speed-dial>  
+<md-content layout="row" layout-align="end center">
+  <md-button class="md-fab md-primary" ng-click="visit('/settings/blacklist/new')">
+    <ng-md-icon icon="add"></ng-md-icon>
+  </md-button>
 </md-content>

@@ -1,11 +1,14 @@
-body { width: 500px; }
+body { width: 500px; height: 350px; }
+
+.pointer { cursor: pointer; }
 
 .md-padding { padding-left: 16px; padding-right: 16px; }
-.md-padding-mini { padding-left: 8px; padding-right: 8px; }
 
-.md-menu { padding: 0; }
+.query { padding-top: 8px; }
+.query md-input-container { margin: 0px; }
 
-.topbar button.settings svg { margin-top: 10px; }
-md-checkbox span { position: relative; top: 16px; }
+.options md-select { margin: 0px; }
 
-.blacklist { margin-bottom: 4px; }
+.new-blacklist md-input-container { width: 100%; }
+
+.saved-queries .saved-query { float: left; border-radius: 20px; padding-left: 16px; margin-top: 8px; margin-right: 8px; }

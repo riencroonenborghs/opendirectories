@@ -3,11 +3,11 @@
 
   "name": "Opendirectories",
   "description": "This extension uses Google to search for open directories",
-  "version": "2.1",
+  "version": "2.2",
 
   "browser_action": {
-    "default_icon": "app/assets/images/search.png",
-    "default_popup": "app/views/search.html"
+    "default_icon": "app/assets/images/app.png",
+    "default_popup": "app/views/app.html"
   },
   "permissions": [
     "activeTab",

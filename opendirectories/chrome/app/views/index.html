@@ -1,21 +1,23 @@
 <md-content class="md-padding search" layout="column">
 
-  <div layout="row">
-    <md-input-container flex="80">
-      <label>Query</label>
-      <input id="query" type="text" ng-model="model.query" ng-enter="search()" />
+  <div layout="row" class="query">
+    <md-input-container flex="85">
+      <input id="query" type="text" ng-model="model.query" ng-enter="search()" placeholder="query" />
     </md-input-container>    
-    <md-button  flex="20" ng-click="search()">
-      Search
+    <md-button ng-click="saveSavedQuery()" class="md-icon-button" ng-if="model.query">
+      <ng-md-icon icon="save"></ng-md-icon>
+    </md-button>
+    <md-button ng-click="search()" class="md-icon-button md-primary md-raised">
+      <ng-md-icon icon="search"></ng-md-icon>
     </md-button>
   </div>
 
-  <div layout="row">
-    <md-select ng-model="model.queryType" flex="20" aria-label="Query types">
+  <div layout="row" class="options" layout-align="space-around center">
+    <md-select ng-model="model.queryType" aria-label="Query types">
       <md-option ng-repeat="queryType in model.queryTypes track by $index" value="{{$index}}">{{queryType.name}}</md-option>
     </md-select>    
     <md-checkbox ng-model="model.alternative" aria-label="Alternative">
-      Alternative Search Method
+      Alternative
     </md-checkbox>
     <md-checkbox ng-model="model.quoted" aria-label="Quoted">
       Quoted
@@ -25,7 +27,12 @@
     </md-checkbox>
   </div>
 
-  <md-card ng-if="model.query" class="query">
-    <md-card-content>{{buildQuery()}}</md-card-content>
-  </md-card>  
+  <div ng-if="model.savedQueries.length > 0" class="saved-queries">
+    <h3>Saved Queries</h3>
+    <div class="saved-query md-whiteframe-1dp pointer" ng-repeat="savedQuery in model.savedQueries" ng-click="searchSavedQuery(savedQuery)">
+      <div layout="row">
+        <h4>{{savedQuery.query}}</h4>
+        <md-button class="md-icon-button md-warn" ng-click="deleteSavedQuery($index); $event.preventDefault(); $event.stopPropagation();"><ng-md-icon icon="delete"></ng-md-icon></md-button>
+    </div>
+  </div>
 </md-content>

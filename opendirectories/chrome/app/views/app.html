@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Opendirectories</title>
+    
+    <base href="/">
+
+    <script src="../app/assets/javascripts/libs/jquery.js"></script>
+    <script src="../app/assets/javascripts/libs/angular.js"></script>
+    <script src="../app/assets/javascripts/libs/angular-route.js"></script>
+    <script src="../app/assets/javascripts/libs/angular-animate.js"></script>
+    <script src="../app/assets/javascripts/libs/angular-aria.js"></script>
+    <script src="../app/assets/javascripts/libs/angular-material.js"></script>
+    <script src="../app/assets/javascripts/libs/angular-material-icons.js"></script>
+
+    <script src="../app/assets/javascripts/app/app.js"></script>
+    <script src="../app/assets/javascripts/app/controllers.js"></script>
+    <script src="../app/assets/javascripts/app/services.js"></script>
+    <script src="../app/assets/javascripts/app/directives.js"></script>
+    <script src="../app/assets/javascripts/app/blacklist.controllers.js"></script>
+    <script src="../app/assets/javascripts/app/query_types.controllers.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="../app/assets/stylesheets/libs/angular-material.css">
+    <link rel="stylesheet" type="text/css" href="../app/assets/stylesheets/libs/angular-material-icons.css">
+    <link rel="stylesheet" type="text/css" href="../app/assets/stylesheets/app.css">
+  </head>
+  <body ng-app="opendirectories" ng-controller="appController">
+
+    <ng-include src="'app/views/topbar.html'"></ng-include>
+
+    <div ng-view></div>
+
+  </body>
+</html>
