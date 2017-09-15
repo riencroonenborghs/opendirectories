@@ -32,33 +32,6 @@ app.service "ChromeStorage", [ "$q", ($q) ->
   service
 ]
 
-app.service "ListService", [->
-  service:
-    addToList: (key, item, callback = null) ->
-      chrome.storage.local.get key, (data) ->
-        list = []
-        if data[key]
-          list = JSON.parse data[key]
-        list.push item
-        newData = {}
-        newData[key] = JSON.stringify list
-        chrome.storage.local.set newData
-        callback() if callback
-        return
-    removeAndStore: (list, key, index, callback = null) ->
-      list.splice index, 1
-      newData = {}
-      newData[key] = JSON.stringify list
-      chrome.storage.local.set newData, ->
-        callback() if callback
-      return
-    update: (list, key, item, index) ->
-      list[index] = item
-      newData = {}
-      newData[key] = JSON.stringify list
-      chrome.storage.local.set newData
-]
-
 app.service "Topbar", [ ->
   back:     null
   title:    null

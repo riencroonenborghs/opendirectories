@@ -3,32 +3,32 @@ var app;
 app = angular.module("opendirectories.blacklist.controllers", ["opendirectories.services"]);
 
 app.controller("BlacklistIndexController", [
-  "$scope", "$location", "ListService", "Topbar", "DEFAULT_SETTINGS", function($scope, $location, ListService, Topbar, DEFAULT_SETTINGS) {
+  "$scope", "$location", "ChromeStorage", "Topbar", "DEFAULT_SETTINGS", function($scope, $location, ChromeStorage, Topbar, DEFAULT_SETTINGS) {
     Topbar.reset();
     Topbar.linkBackTo("/");
     Topbar.setTitle("Settings");
     Topbar.addSubtitle("Blacklist");
     $scope.blacklist = {
       "default": $.extend([], DEFAULT_SETTINGS.BLACKLIST),
-      chrome: []
+      storage: []
     };
-    chrome.storage.local.get("blacklist", function(data) {
-      if (data.blacklist) {
-        return $scope.blacklist.chrome = JSON.parse(data.blacklist);
-      }
+    ChromeStorage.get("blacklist").then(function(data) {
+      return $scope.blacklist.storage = data;
     });
     $scope.edit = function(index) {
       return $location.path("/settings/blacklist/" + index);
     };
     return $scope["delete"] = function(index) {
-      ListService.service.removeAndStore($scope.blacklist.chrome, "blacklist", index);
-      return $rootScope.$broadcast("reload.chrome");
+      $scope.blacklist.storage.splice(index, 1);
+      return ChromeStorage.set("blacklist", $scope.blacklist.storage).then(function() {
+        return $rootScope.$broadcast("reload.chrome");
+      });
     };
   }
 ]);
 
 app.controller("BlacklistNewController", [
-  "$scope", "$rootScope", "$timeout", "Topbar", "ListService", function($scope, $rootScope, $timeout, Topbar, ListService) {
+  "$scope", "$rootScope", "$timeout", "Topbar", "ChromeStorage", function($scope, $rootScope, $timeout, Topbar, ChromeStorage) {
     Topbar.reset();
     Topbar.linkBackTo("/settings/blacklist");
     Topbar.setTitle("Settings");
@@ -44,18 +44,17 @@ app.controller("BlacklistNewController", [
     };
     return $scope.save = function() {
       if (!$scope.form.$invalid) {
-        ListService.service.addToList("blacklist", $scope.model.url);
-        $rootScope.$broadcast("reload.chrome");
-        return $timeout((function() {
+        return ChromeStorage.add("blacklist", $scope.model.url).then(function() {
+          $rootScope.$broadcast("reload.chrome");
           return $scope.visit("/settings/blacklist");
-        }), 500);
+        });
       }
     };
   }
 ]);
 
 app.controller("BlacklistEditController", [
-  "$scope", "$rootScope", "$routeParams", "$timeout", "Topbar", "ListService", function($scope, $rootScope, $routeParams, $timeout, Topbar, ListService) {
+  "$scope", "$rootScope", "$routeParams", "$timeout", "Topbar", "ChromeStorage", function($scope, $rootScope, $routeParams, $timeout, Topbar, ChromeStorage) {
     Topbar.reset();
     Topbar.linkBackTo("/settings/blacklist");
     Topbar.setTitle("Settings");
@@ -67,19 +66,17 @@ app.controller("BlacklistEditController", [
       url: ""
     };
     $scope.blacklist = [];
-    chrome.storage.local.get("blacklist", function(data) {
-      if (data.blacklist) {
-        $scope.blacklist = JSON.parse(data.blacklist);
-        return $scope.model.url = $scope.blacklist[$routeParams.index];
-      }
+    ChromeStorage.get("blacklist").then(function(data) {
+      $scope.blacklist = data;
+      return $scope.model.url = $scope.blacklist[$routeParams.index];
     });
     return $scope.save = function() {
       if (!$scope.form.$invalid) {
-        ListService.service.update($scope.blacklist, "blacklist", $scope.model.url, $routeParams.index);
-        $rootScope.$broadcast("reload.chrome");
-        return $timeout((function() {
+        $scope.blacklist[$routeParams.index] = $scope.model.url;
+        return ChromeStorage.set("blacklist", $scope.blacklist).then(function() {
+          $rootScope.$broadcast("reload.chrome");
           return $scope.visit("/settings/blacklist");
-        }), 500);
+        });
       }
     };
   }

@@ -65,55 +65,6 @@ app.service("ChromeStorage", [
   }
 ]);
 
-app.service("ListService", [
-  function() {
-    return {
-      service: {
-        addToList: function(key, item, callback) {
-          if (callback == null) {
-            callback = null;
-          }
-          return chrome.storage.local.get(key, function(data) {
-            var list, newData;
-            list = [];
-            if (data[key]) {
-              list = JSON.parse(data[key]);
-            }
-            list.push(item);
-            newData = {};
-            newData[key] = JSON.stringify(list);
-            chrome.storage.local.set(newData);
-            if (callback) {
-              callback();
-            }
-          });
-        },
-        removeAndStore: function(list, key, index, callback) {
-          var newData;
-          if (callback == null) {
-            callback = null;
-          }
-          list.splice(index, 1);
-          newData = {};
-          newData[key] = JSON.stringify(list);
-          chrome.storage.local.set(newData, function() {
-            if (callback) {
-              return callback();
-            }
-          });
-        },
-        update: function(list, key, item, index) {
-          var newData;
-          list[index] = item;
-          newData = {};
-          newData[key] = JSON.stringify(list);
-          return chrome.storage.local.set(newData);
-        }
-      }
-    };
-  }
-]);
-
 app.service("Topbar", [
   function() {
     return {

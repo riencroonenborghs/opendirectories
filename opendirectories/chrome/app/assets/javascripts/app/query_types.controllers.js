@@ -3,7 +3,7 @@ var app;
 app = angular.module("opendirectories.queryTypes.controllers", ["opendirectories.services"]);
 
 app.controller("QueryTypesIndexController", [
-  "$scope", "$location", "ListService", "Topbar", "DEFAULT_SETTINGS", function($scope, $location, ListService, Topbar, DEFAULT_SETTINGS) {
+  "$scope", "$location", "ChromeStorage", "Topbar", "DEFAULT_SETTINGS", function($scope, $location, ChromeStorage, Topbar, DEFAULT_SETTINGS) {
     Topbar.reset();
     Topbar.linkBackTo("/");
     Topbar.setTitle("Settings");
@@ -12,23 +12,23 @@ app.controller("QueryTypesIndexController", [
       "default": $.extend([], DEFAULT_SETTINGS.QUERY_TYPES),
       chrome: []
     };
-    chrome.storage.local.get("queryTypes", function(data) {
-      if (data.queryTypes) {
-        return $scope.queryTypes.chrome = JSON.parse(data.queryTypes);
-      }
+    ChromeStorage.get("queryTypes").then(function(data) {
+      return $scope.queryTypes.storage = data;
     });
     $scope.edit = function(index) {
       return $location.path("/settings/queryTypes/" + index);
     };
     return $scope["delete"] = function(index) {
-      ListService.service.removeAndStore($scope.queryTypes.chrome, "queryTypes", index);
-      return $rootScope.$broadcast("reload.chrome");
+      $scope.queryTypes.storage.splice(index, 1);
+      return ChromeStorage.set("queryTypes", $scope.queryTypes.storage).then(function() {
+        return $rootScope.$broadcast("reload.chrome");
+      });
     };
   }
 ]);
 
 app.controller("QueryTypeNewController", [
-  "$scope", "$rootScope", "$timeout", "Topbar", "ListService", function($scope, $rootScope, $timeout, Topbar, ListService) {
+  "$scope", "$rootScope", "$timeout", "Topbar", "ChromeStorage", function($scope, $rootScope, $timeout, Topbar, ChromeStorage) {
     Topbar.reset();
     Topbar.linkBackTo("/settings/queryTypes");
     Topbar.setTitle("Settings");
@@ -45,18 +45,17 @@ app.controller("QueryTypeNewController", [
     };
     return $scope.save = function() {
       if (!$scope.form.$invalid) {
-        ListService.service.addToList("queryTypes", $scope.model);
-        $rootScope.$broadcast("reload.chrome");
-        return $timeout((function() {
+        return ChromeStorage.add("queryTypes", $scope.model).then(function() {
+          $rootScope.$broadcast("reload.chrome");
           return $scope.visit("/settings/queryTypes");
-        }), 500);
+        });
       }
     };
   }
 ]);
 
 app.controller("QueryTypeEditController", [
-  "$scope", "$rootScope", "$routeParams", "$timeout", "Topbar", "ListService", function($scope, $rootScope, $routeParams, $timeout, Topbar, ListService) {
+  "$scope", "$rootScope", "$routeParams", "$timeout", "Topbar", "ChromeStorage", function($scope, $rootScope, $routeParams, $timeout, Topbar, ChromeStorage) {
     Topbar.reset();
     Topbar.linkBackTo("/settings/queryTypes");
     Topbar.setTitle("Settings");
@@ -69,19 +68,17 @@ app.controller("QueryTypeEditController", [
       exts: ""
     };
     $scope.queryTypes = [];
-    chrome.storage.local.get("queryTypes", function(data) {
-      if (data.queryTypes) {
-        $scope.queryTypes = JSON.parse(data.queryTypes);
-        return $scope.model = $scope.queryTypes[$routeParams.index];
-      }
+    ChromeStorage.get("queryTypes").then(function(data) {
+      $scope.queryTypes = data;
+      return $scope.model = $scope.queryTypes[$routeParams.index];
     });
     return $scope.save = function() {
       if (!$scope.form.$invalid) {
-        ListService.service.update($scope.queryTypes, "queryTypes", $scope.model, $routeParams.index);
-        $rootScope.$broadcast("reload.chrome");
-        return $timeout((function() {
+        $scope.queryTypes[$routeParams.index] = $scope.model;
+        return ChromeStorage.set("queryTypes", $scope.queryTypes).then(function() {
+          $rootScope.$broadcast("reload.chrome");
           return $scope.visit("/settings/queryTypes");
-        }), 500);
+        });
       }
     };
   }

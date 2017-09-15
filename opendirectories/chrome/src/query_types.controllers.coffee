@@ -2,26 +2,24 @@ app = angular.module "opendirectories.queryTypes.controllers", [
   "opendirectories.services"
 ]
 
-app.controller "QueryTypesIndexController", ["$scope", "$location", "ListService", "Topbar", "DEFAULT_SETTINGS",
-($scope, $location, ListService, Topbar, DEFAULT_SETTINGS) ->
+app.controller "QueryTypesIndexController", ["$scope", "$location", "ChromeStorage", "Topbar", "DEFAULT_SETTINGS",
+($scope, $location, ChromeStorage, Topbar, DEFAULT_SETTINGS) ->
   Topbar.reset()
   Topbar.linkBackTo "/"
   Topbar.setTitle "Settings"
   Topbar.addSubtitle "Query Types"
 
   $scope.queryTypes = {default: $.extend([], DEFAULT_SETTINGS.QUERY_TYPES), chrome: []}
-  chrome.storage.local.get "queryTypes", (data) ->
-    if data.queryTypes
-      $scope.queryTypes.chrome = JSON.parse data.queryTypes
+  ChromeStorage.get("queryTypes").then (data) -> $scope.queryTypes.storage = data
 
   $scope.edit = (index) -> $location.path "/settings/queryTypes/#{index}"
   $scope.delete = (index) -> 
-    ListService.service.removeAndStore $scope.queryTypes.chrome, "queryTypes", index
-    $rootScope.$broadcast "reload.chrome"
+    $scope.queryTypes.storage.splice(index, 1)
+    ChromeStorage.set("queryTypes", $scope.queryTypes.storage).then -> $rootScope.$broadcast "reload.chrome"
 ]
 
-app.controller "QueryTypeNewController", ["$scope", "$rootScope", "$timeout", "Topbar", "ListService", 
-($scope, $rootScope, $timeout, Topbar, ListService) ->
+app.controller "QueryTypeNewController", ["$scope", "$rootScope", "$timeout", "Topbar", "ChromeStorage", 
+($scope, $rootScope, $timeout, Topbar, ChromeStorage) ->
   Topbar.reset()
   Topbar.linkBackTo "/settings/queryTypes"
   Topbar.setTitle "Settings"
@@ -36,13 +34,13 @@ app.controller "QueryTypeNewController", ["$scope", "$rootScope", "$timeout", "T
   $scope.model = {name: "", exts: ""}
   $scope.save = ->
     if !$scope.form.$invalid
-      ListService.service.addToList "queryTypes", $scope.model
-      $rootScope.$broadcast "reload.chrome"
-      $timeout (->$scope.visit("/settings/queryTypes")), 500
+      ChromeStorage.add("queryTypes", $scope.model).then -> 
+        $rootScope.$broadcast "reload.chrome"
+        $scope.visit "/settings/queryTypes"
 ]
 
-app.controller "QueryTypeEditController", ["$scope", "$rootScope", "$routeParams", "$timeout", "Topbar", "ListService",
-($scope, $rootScope, $routeParams, $timeout, Topbar, ListService) ->
+app.controller "QueryTypeEditController", ["$scope", "$rootScope", "$routeParams", "$timeout", "Topbar", "ChromeStorage",
+($scope, $rootScope, $routeParams, $timeout, Topbar, ChromeStorage) ->
   Topbar.reset()
   Topbar.linkBackTo "/settings/queryTypes"
   Topbar.setTitle "Settings"
@@ -54,14 +52,14 @@ app.controller "QueryTypeEditController", ["$scope", "$rootScope", "$routeParams
 
   $scope.model = {name: "", exts: ""}
   $scope.queryTypes = []
-  chrome.storage.local.get "queryTypes", (data) ->
-    if data.queryTypes
-      $scope.queryTypes = JSON.parse data.queryTypes
-      $scope.model = $scope.queryTypes[$routeParams.index]
+  ChromeStorage.get("queryTypes").then (data) ->
+    $scope.queryTypes = data
+    $scope.model = $scope.queryTypes[$routeParams.index]
 
   $scope.save = ->
-    if !$scope.form.$invalid      
-      ListService.service.update $scope.queryTypes, "queryTypes", $scope.model, $routeParams.index
-      $rootScope.$broadcast "reload.chrome"
-      $timeout (->$scope.visit("/settings/queryTypes")), 500
+    if !$scope.form.$invalid   
+      $scope.queryTypes[$routeParams.index] = $scope.model
+      ChromeStorage.set("queryTypes", $scope.queryTypes).then ->
+        $rootScope.$broadcast "reload.chrome"
+        $scope.visit "/settings/queryTypes"
 ]

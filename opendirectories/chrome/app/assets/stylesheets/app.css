@@ -11,4 +11,7 @@ body { width: 500px; height: 350px; }
 
 .new-blacklist md-input-container { width: 100%; }
 
-.saved-queries .saved-query { float: left; border-radius: 20px; padding-left: 16px; margin-top: 8px; margin-right: 8px; }
+.saved-queries { max-height: 250px; }
+
+
+.search md-checkbox { margin-bottom: 0px; }
