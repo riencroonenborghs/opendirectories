@@ -1,12 +1,16 @@
 <md-content>
   <md-toolbar>
-    <div class="md-toolbar-tools">
+    <div class="md-toolbar-tools" layout="row">
       <h2>
         <md-button aria-label="Go Back" class="md-icon-button" ng-if="Topbar.back" ng-click="visit(Topbar.back)">
           <ng-md-icon icon="arrow_back" style="fill: white"></ng-md-icon>
         </md-button>
         {{Topbar.title}}
       </h2>
+      <span flex></span>
+      <md-button aria-label="Saved Queries" class="md-icon-button" ng-click="openSavedQueries()" ng-if="searchModel.model.savedQueries.length > 0">
+        <ng-md-icon icon="save" style="fill: white;"></ng-md-icon>
+      </md-button>
       <md-menu>
         <md-button aria-label="Settings" class="settings md-icon-button" ng-click="$mdOpenMenu($event)">
           <ng-md-icon icon="more_vert" style="fill: white;"></ng-md-icon>

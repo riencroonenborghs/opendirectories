@@ -1,39 +1,32 @@
 <md-content class="md-padding search" layout="column">
-
   <div layout="row" class="query">
-    <md-input-container flex="85">
-      <input id="query" type="text" ng-model="model.query" ng-enter="search()" placeholder="query" />
+    <md-input-container flex>
+      <input id="query" type="text" ng-model="searchModel.model.query" ng-enter="search()" ng-change="buildQuery()" placeholder="query" />
     </md-input-container>    
-    <md-button ng-click="saveSavedQuery()" class="md-icon-button" ng-if="model.query">
+    <md-button ng-click="saveSavedQuery()" class="md-icon-button" ng-if="searchModel.model.query">
       <ng-md-icon icon="save"></ng-md-icon>
     </md-button>
-    <md-button ng-click="search()" class="md-icon-button md-primary">
+    <md-button ng-click="search()" class="md-icon-button md-primary" ng-if="searchModel.model.query">
       <ng-md-icon icon="search"></ng-md-icon>
     </md-button>
   </div>
 
   <div layout="row" class="options" layout-align="space-around center">
-    <md-select ng-model="model.queryType" aria-label="Query types">
-      <md-option ng-repeat="queryType in model.queryTypes track by $index" value="{{$index}}">{{queryType.name}}</md-option>
+    <md-select ng-model="searchModel.model.queryType" ng-change="buildQuery()" aria-label="Query types">
+      <md-option ng-repeat="queryType in searchModel.model.queryTypes track by $index" value="{{$index}}">{{queryType.name}}</md-option>
     </md-select>    
-    <md-checkbox ng-model="model.alternative" aria-label="Alternative">
+    <md-checkbox ng-model="searchModel.model.alternative" ng-change="buildQuery()" aria-label="Alternative">
       Alternative
     </md-checkbox>
-    <md-checkbox ng-model="model.quoted" aria-label="Quoted">
+    <md-checkbox ng-model="searchModel.model.quoted" ng-change="buildQuery()" aria-label="Quoted">
       Quoted
     </md-checkbox>
-    <md-checkbox ng-model="model.incognito" aria-label="Incognito">
+    <md-checkbox ng-model="searchModel.model.incognito" ng-change="buildQuery()" aria-label="Incognito">
       Incognito
     </md-checkbox>
   </div>
 
-  <md-content ng-if="model.savedQueries.length > 0">
-    <h4>Saved queries</h4>
-    <md-content class="saved-queries">
-      <md-list-item ng-repeat="savedQuery in model.savedQueries" ng-click="searchSavedQuery(savedQuery)" class="noright">
-        <p>{{savedQuery.query}}</p>
-        <md-button class="md-icon-button md-warn" ng-click="deleteSavedQuery($index); $event.preventDefault(); $event.stopPropagation();"><ng-md-icon icon="delete"></ng-md-icon></md-button>
-      </md-list-item>
-    </md-content>
-  </md-content>
+  <div class="google-query" ng-if="searchModel.model.query">
+    <small>{{googleQuery}}</small>
+  </div>
 </md-content>

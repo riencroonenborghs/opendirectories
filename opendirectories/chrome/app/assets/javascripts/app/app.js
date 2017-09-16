@@ -1,6 +1,6 @@
 var app;
 
-app = angular.module("opendirectories", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "opendirectories.controllers", "opendirectories.services", "opendirectories.directives", "opendirectories.blacklist.controllers", "opendirectories.queryTypes.controllers"]);
+app = angular.module("opendirectories", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "opendirectories.controllers", "opendirectories.services", "opendirectories.directives", "opendirectories.factories", "opendirectories.blacklist.controllers", "opendirectories.queryTypes.controllers"]);
 
 app.service("DEFAULT_SETTINGS", [
   function() {

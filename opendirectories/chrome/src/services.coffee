@@ -21,7 +21,8 @@ app.service "ChromeStorage", [ "$q", ($q) ->
       deferred = $q.defer()
       @get(key).then (data) =>
         data.push item
-        @set(key, data).then => deferred.resolve()
+        @set(key, data).then => 
+          deferred.resolve()
       deferred.promise
     remove: (key, index) ->
       deferred = $q.defer()
@@ -43,4 +44,36 @@ app.service "Topbar", [ ->
   linkBackTo: (url) -> @back = url
   setTitle: (t) -> @title = t
   addSubtitle: (t) -> @subtitles.push t
+]
+
+app.service "GoogleSearchService", [ "GoogleQueryFactory", (GoogleQueryFactory) ->
+  service =
+    search: (model) ->
+      chrome.windows.create
+        url: new GoogleQueryFactory(model).buildUrl(),
+        incognito: model.incognito
+  service
+]
+
+app.service "GoogleSearchModelService", [ "GoogleSearchModelFactory", "ChromeStorage", (GoogleSearchModelFactory, ChromeStorage) ->
+  service =
+    model: GoogleSearchModelFactory
+    addToList: (type, item) ->
+      @model[type].push item
+    clearList: (type) ->
+      @model[type] = []
+    # load all from chrome storage (blacklist, query types, saved queries)
+    loadFromChrome: (key = null) ->
+      # chrome.storage.local.clear()
+      if key
+        @loadKeyFromChrome key
+      else
+        @loadKeyFromChrome "blacklist"
+        @loadKeyFromChrome "queryTypes"
+        @loadKeyFromChrome "savedQueries"
+    loadKeyFromChrome: (key) ->
+      ChromeStorage.get(key).then (data) =>
+        for item in data
+          @addToList key, item
+  service
 ]

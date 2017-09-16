@@ -7,6 +7,7 @@ app = angular.module "opendirectories", [
   "opendirectories.controllers",
   "opendirectories.services",
   "opendirectories.directives",
+  "opendirectories.factories",
   "opendirectories.blacklist.controllers",
   "opendirectories.queryTypes.controllers"
 ]

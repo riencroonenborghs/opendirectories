@@ -1,86 +1,57 @@
 app = angular.module "opendirectories.controllers", []
 
-class Google
-  constructor: (@model) ->
-    @server = "https://www.google.com/"
-    @path   = "search"
-    return
-  buildUrl: -> "#{@server}#{@path}?q=#{encodeURIComponent(@buildQuery())}"
-  buildQuery: ->
-    queryString = ""
-    queryString = if @model.alternative then "\"parent directory\" " else "intitle:\"index.of\" "
-    queryString += if @model.quoted then " \"#{@model.query}\" " else @model.query
-    queryString += " -html -htm -php -asp -jsp "
-    for blacklistItem in @model.blacklist
-      queryString += " -" + blacklistItem
-    "#{queryString}#{@buildExt()}"
-  buildExt: ->
-    queryType = @model.queryTypes[@model.queryType]
-    if queryType.exts == "" then "" else " (#{queryType.exts.split(',').join("|")}) "
-
-
-app.controller "appController", ["$scope", "$mdMedia", "$mdSidenav", "$timeout", "$location", "DEFAULT_SETTINGS", "Topbar", "ChromeStorage",
-($scope, $mdMedia, $mdSidenav, $timeout, $location, DEFAULT_SETTINGS, Topbar, ChromeStorage) ->
-  resetModel = ->
-    $scope.model =
-      query:        null
-      queryTypes:   $.extend([], DEFAULT_SETTINGS.QUERY_TYPES)
-      queryType:    0
-      alternative:  false
-      quoted:       true
-      incognito:    true
-      blacklist:    $.extend([], DEFAULT_SETTINGS.BLACKLIST)
-      savedQueries: []
-  resetModel()
+app.controller "appController", ["$scope", "$mdSidenav", "$timeout", "$location", "GoogleSearchModelService", "Topbar", "ChromeStorage", "$rootScope", "GoogleSearchService", "GoogleQueryFactory",
+($scope, $mdSidenav, $timeout, $location, GoogleSearchModelService, Topbar, ChromeStorage, $rootScope, GoogleSearchService, GoogleQueryFactory) ->
+  # router loads appController again
+  # don't want to set the searchModel twice (and load everything twice)
+  unless $scope.searchModel
+    $scope.searchModel = GoogleSearchModelService
+    $scope.searchModel.loadFromChrome()
   
   $scope.Topbar = Topbar
   Topbar.reset()
   Topbar.setTitle "Opendirectories"
 
-  # chrome.storage.local.clear()
-  loadFromChrome = ->
-    resetModel()
-    ChromeStorage.get("blacklist").then (data) ->
-      for item in data
-        $scope.model.blacklist.push item
-    ChromeStorage.get("queryTypes").then (data) ->
-      for item in data
-        $scope.model.queryTypes.push item
-    ChromeStorage.get("savedQueries").then (data) ->
-      for item in data
-        $scope.model.savedQueries.push item
-  loadFromChrome()
-  $scope.$on "reload.chrome", -> loadFromChrome()
+  $scope.$on "reload.chrome", -> $scope.searchModel.loadFromChrome()
 
-  # saved queries
   $scope.saveSavedQuery = ->
     item =
-      queryType: $scope.model.queryTypes[$scope.queryType]
-      query: $scope.model.query
-      quoted: $scope.model.quoted
-      incognito: $scope.model.incognito
-      alternative: $scope.model.alternative
-    ChromeStorage.add("savedQueries", item).then -> loadFromChrome()
-  $scope.deleteSavedQuery = (index) ->
-    ChromeStorage.remove("savedQueries", index).then -> loadFromChrome()
-  $scope.searchSavedQuery = (savedQuery) ->
-    $scope.model.query = savedQuery.query
-    $scope.model.quoted = savedQuery.quoted
-    $scope.model.incognito = savedQuery.incognito
-    $scope.model.alternative = savedQuery.alternative
-    for queryType,index in $scope.model.queryTypes when queryType == savedQuery.queryType
-      $scope.model.queryType = index
-    $scope.search()
-
-  $scope.buildQuery = ->
-    new Google($scope.model).buildQuery()
-  $scope.search = ->
-    if $scope.model.query
-      chrome.windows.create
-        url: new Google($scope.model).buildUrl(),
-        incognito: $scope.model.incognito
+      queryType:    $scope.searchModel.model.queryTypes[$scope.queryType]
+      query:        $scope.searchModel.model.query
+      quoted:       $scope.searchModel.model.quoted
+      incognito:    $scope.searchModel.model.incognito
+      alternative:  $scope.searchModel.model.alternative
+    ChromeStorage.add("savedQueries", item).then -> 
+      $scope.searchModel.clearList "savedQueries"
+      $scope.searchModel.loadFromChrome()
+      $scope.openSavedQueries()
+  $scope.openSavedQueries = -> $mdSidenav("savedQueries").toggle()
+  $scope.closeSavedQueries = -> $mdSidenav("savedQueries").close()
+  
+  $scope.search = -> GoogleSearchService.search($scope.searchModel.model)
+  $scope.buildQuery = -> $scope.googleQuery = new GoogleQueryFactory($scope.searchModel.model).buildQuery()
   
   $scope.visit = (url) -> $location.path url
 
   $timeout (-> $(".search #query").focus()), 500
 ]  
+
+app.controller "SavedQueriesController", [ "$scope", "GoogleSearchService", "ChromeStorage", "GoogleSearchModelService",
+($scope, GoogleSearchService, ChromeStorage, GoogleSearchModelService) ->  
+  $scope.deleteSavedQuery = (index) ->
+    ChromeStorage.remove("savedQueries", index).then -> 
+      $scope.searchModel.clearList "savedQueries"
+      ChromeStorage.get("savedQueries").then (data) ->
+        for item in data
+          $scope.searchModel.addToList "savedQueries", item
+
+  $scope.searchSavedQuery = (savedQuery) ->
+    searchModel = GoogleSearchModelService
+    searchModel.model.query        = savedQuery.query
+    searchModel.model.quoted       = savedQuery.quoted
+    searchModel.model.incognito    = savedQuery.incognito
+    searchModel.model.alternative  = savedQuery.alternative
+    for queryType,index in searchModel.model.queryTypes when queryType == savedQuery.queryType
+      searchModel.model.queryType = index
+    GoogleSearchService.search(searchModel.model)
+]
