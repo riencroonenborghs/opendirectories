@@ -10,7 +10,7 @@ class Api::V1::DownloadsController < ApplicationController
   def create
     download = current_user.downloads.build(
       params.require(:download).permit(
-        :url, :http_username, :http_password, :file_filter, :audio_only, :audio_format
+        :url, :http_username, :http_password, :file_filter, :audio_only, :audio_format, :download_subs, :srt_subs
       )
     )
 
