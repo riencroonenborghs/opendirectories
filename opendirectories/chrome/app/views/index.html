@@ -3,10 +3,10 @@
     <md-input-container flex>
       <input id="query" type="text" ng-model="searchModel.model.query" ng-enter="search()" ng-change="buildQuery()" placeholder="query" />
     </md-input-container>    
-    <md-button ng-click="saveSavedQuery()" class="md-icon-button" ng-if="searchModel.model.query">
+    <md-button ng-click="saveSavedQuery()" class="md-icon-button" ng-if="searchModel.model.query" aria-label="Save Query" title="Save Query">
       <ng-md-icon icon="save"></ng-md-icon>
     </md-button>
-    <md-button ng-click="search()" class="md-icon-button md-primary" ng-if="searchModel.model.query">
+    <md-button ng-click="search()" class="md-icon-button md-primary" ng-if="searchModel.model.query" aria-label="Search" title="Search">
       <ng-md-icon icon="search"></ng-md-icon>
     </md-button>
   </div>
@@ -15,13 +15,13 @@
     <md-select ng-model="searchModel.model.queryType" ng-change="buildQuery()" aria-label="Query types">
       <md-option ng-repeat="queryType in searchModel.model.queryTypes track by $index" value="{{$index}}">{{queryType.name}}</md-option>
     </md-select>    
-    <md-checkbox ng-model="searchModel.model.alternative" ng-change="buildQuery()" aria-label="Alternative">
+    <md-checkbox ng-model="searchModel.model.alternative" ng-change="buildQuery()" aria-label="Alternative" title="Alternative">
       Alternative
     </md-checkbox>
-    <md-checkbox ng-model="searchModel.model.quoted" ng-change="buildQuery()" aria-label="Quoted">
+    <md-checkbox ng-model="searchModel.model.quoted" ng-change="buildQuery()" aria-label="Quoted" title="Quoted">
       Quoted
     </md-checkbox>
-    <md-checkbox ng-model="searchModel.model.incognito" ng-change="buildQuery()" aria-label="Incognito">
+    <md-checkbox ng-model="searchModel.model.incognito" ng-change="buildQuery()" aria-label="Incognito" title="Incognito">
       Incognito
     </md-checkbox>
   </div>
